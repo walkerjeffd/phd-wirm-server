@@ -1,0 +1,5 @@
+Thanks for registering an account at http://river.walkerjeff.com.
+
+To activate your account, visit the following URL. Note that you have {{ expiration_days }} days to activate your account.
+
+http://river.walkerjeff.com/accounts/activate/{{ activation_key }}/

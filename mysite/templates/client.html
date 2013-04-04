@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+
+<script type="text/template" id="template-dashboard">
+<div class="row" id="dashboard-header">
+  <div class="span6" id="project-info">
+  </div>
+  <div class="span6" id="controls">
+  </div>
+</div>
+<div class="row">
+  <div class="span6" id="chart-container">
+  </div>
+  <div class="span6" id="param-container">
+  </div>
+</div>
+</script>
+
+<script type="text/template" id="template-project-info">
+<h1 id="project-title"><%= title %></h1>
+<div id="project-details" style="position:relative;">
+  <ul>
+    <li>Location: <%= location %></li>
+    <li>Description: <%= description %></li>
+  </ul>
+  <div class="btn-toolbar">
+    <div class="btn btn-edit"><i class="icon-edit"></i> Edit Project Info</div>
+    <div class="btn btn-danger btn-delete"><i class="icon-trash icon-white"></i> Delete Project</div>
+  </div>
+  <div class="alert alert-error" style="position:absolute; left:147px;">
+    <span>Are you sure?</span>
+    <div class="btn btn-danger btn-confirm">Yes</div>
+    <div class="btn btn-cancel">No</div>
+  </div>
+</div>
+</script>
+
+<script type="text/template" id="template-controls">
+<div class="btn-toolbar">
+  <div class="btn btn-primary btn-save"><i class="icon-check icon-white"></i> Save</div>
+  <div class="btn btn-reset"><i class="icon-refresh"></i> Reset</div>
+</div>
+<div class="alert">
+  <span id="status"></span>
+</div>
+</script>
+
+<script type="text/template" id="template-project-modal">
+<div id="projectModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="projectModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="projectModalLabel">Create Project</h3>
+  </div>
+  <div class="modal-body">
+    <div class="alert alert-error"></div>
+    <p><label for="id_title">Title:</label> <input name="title" type="text" id="id_title" value="<%=title%>"></p>
+    <p><label for="id_location">Location:</label> <input name="location" type="text" id="id_location" value="<%=location%>"></p>
+    <p><label for="id_description">Description:</label> <textarea cols="25" rows="5" name="description" id="id_description"><%=description%></textarea></p>
+    <!--<p><label for="id_parameter_values">Parameter Values:</label> <textarea cols="25" rows="5" name="parameter_values" id="id_parameter_values"><% print(JSON.stringify(arguments[0].parameter_values)) %></textarea></p>-->
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-close" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button class="btn btn-primary btn-save">Save</button>
+  </div>
+</div>
+</script>
+
+<script type="text/template" id="template-parameter-label">
+  <span class="param-label"><%= title %> (<%= units %>)</span>: <span class="param-value"><%= value %></span>
+  <a href="/theory/#<%= key %>" class="btn btn-mini btn-success param-help">Help</a>
+</script>
+
+<script type="text/template" id="template-project-list">
+<h1>Existing Projects</h1>
+<ul class="project-list">
+</ul>
+</script>
+
+<script type="text/template" id="template-error">
+<h1><%= title %></h1>
+<p><%= message %></p>
+</script>
+
+
+{% endblock content %}
+
+{% block scripts %}
+  {{ block.super }}
+  <script src="{% static "js/lib/underscore-1.4.4.js" %}"></script>
+  <script src="{% static "js/lib/backbone-1.0.0.js" %}"></script>
+  <script src="{% static "js/lib/d3-3.0.8.js" %}"></script>
+  <script src="{% static "js/lib/numeric-1.2.6.js" %}"></script>
+    
+  <script src="{% static "js/utils.js" %}"></script>
+  <script src="{% static "js/app.js" %}"></script>
+  <script src="{% static "js/models/project.js" %}"></script>
+  <script src="{% static "js/models/parameter.js" %}"></script>
+  <script src="{% static "js/collections/projects.js" %}"></script>
+  <script src="{% static "js/collections/parameters.js" %}"></script>
+  <script src="{% static "js/views/dashboard.js" %}"></script>
+  <script src="{% static "js/views/controls.js" %}"></script>
+  <script src="{% static "js/views/parameter.js" %}"></script>
+  <script src="{% static "js/views/project.js" %}"></script>
+  <script src="{% static "js/views/simulation.js" %}"></script>
+  <script src="{% static "js/views/chart.js" %}"></script>
+  <script src="{% static "js/views/error.js" %}"></script>
+  <script src="{% static "js/routers/workspace.js" %}"></script>
+
+  <script>
+  $(function() {
+    {% if user.is_authenticated %}
+      App.user = "{{ user }}";
+    {% else %}
+      App.user = null;
+    {% endif %}
+    App.boot($('#content'));
+  });
+  </script>
+{% endblock scripts %}

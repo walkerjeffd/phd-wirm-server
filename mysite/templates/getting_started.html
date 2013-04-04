@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span3">
+      <div class="well sidebar-nav" data-spy="affix" data-offset-top="0">
+        <ul class="nav nav-list">
+          <li class="active"><a href="#"><i class="icon-arrow-up"></i> Top</a></li>
+          <li class="nav-header">Science Background</li>
+          <li><a href="#do">Dissolved Oxygen</a></li>
+          <li><a href="#bod">Biochemical Oxygen Demand</a></li>
+          <li class="nav-header">Modeling Process</li>
+          <li><a href="#wqmodel">Overview</a></li>
+          <li><a href="#wqmodel">Parameter Estimation</a></li>
+          <li><a href="#wqmodel">Scenario Comparison</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="span9">
+      <h1>Background</h1>
+      <p>This page provides some background on the processes represented by the BOD River Model. It is intended to provide a brief overview of the concepts and terms used throughout the site. More information can be obtained from a variety of sources, in particular any book on aquatic ecosystems, water quality modeling and environmental engineering.</p>
+      <h3>Dissolved Oxygen</h3>
+      <p><b>D</b>issolved <b>O</b>xygen (DO) is the amount of oxygen dissolved in water. Like humans, fish and other aquatic organisms need oxygen to survive. However, when rivers or lakes are heavily polluted with organic matter such as dead plant material or wastewater discharge, bacteria break down the organic compounds through a process called decomposition, which consumes the oxygen in the water. If the oxygen levels decrease too much, then fish and other organisms are unable to breath and can die. The minimum concentration of dissolved oxygen needed for survival varies by organism and even species, but in general, concentrations below 4 or 5 mg/L are considered too low to support aquatic life. For more information about dissolved oxygen, see the <a href="http://ga.water.usgs.gov/edu/dissolvedoxygen.html">USGS Water Science School</a>.</p>
+      <h3>Biochemical Oxygen Demand</h3>
+      <p><b>B</b>iochemical <b>O</b>xygen <b>D</b>emand (BOD) is a general term that refers to any substance that undergoes microbial decomposition resulting in dissolved oxygen consumption. BOD was originally used to describe the potency of wastewater effluent, but can also refer to the amount of organic matter from dead plants and animals. When organic material is decomposed by bacteria, oxygen is consumed and the dissolved oxygen levels decrease. BOD is generally measured by putting the sample in a bottle and measuring how much oxygen is consumed over time. The more BOD, the more oxygen is consumed.</p>
+      <h3>What is a Water Quality Model?</h3>
+      <p>Water quality models are mathematical representations used to understand the complex biological and chemical processes that occur in natural ecosystems. One of the first water quality models, the Streeter-Phelps model, was created in the 1920's as the result of a project looking at wastewater discharge on dissolved oxygen levels in the Ohio River. The BOD River Model defined on this site is a variation of the original Streeter-Phelps model.</p>
+      <p>Water quality models are used to determine the effect of pollution on the natural environment. Unlike some science disciplines, it is often not feasible to perform experiments on natural systems such as rivers because the potential effects of the experiment on living organisms. Models are thus used to figure out how much pollution would be considered acceptable and not cause significant harm to the ecosystem.</p>
+    </div>
+  </div>
+</div>
+{% endblock content %}

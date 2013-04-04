@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+
+{% block content %}
+<div class="hero-unit" style="position:relative;">
+  <h1>The BOD River Model</h1>
+  <img src="{% static "img/chart_screenshot.png"%}" alt="Example Chart" width="350" height="215" style="float:right; border-radius:10px; margin-left:25px;">
+  <p>A simple water quality model for understanding the effects of pollution on dissolved oxygen levels in rivers and streams. This site was created as a demonstration of modern web application development, and how new technologies can be used to create interactive, easy-to-use environmental simulation models. It is intended primarily for educational purposes, but can be used for the analysis of real systems.</p>
+  <p><a href="/about/" class="btn btn-primary btn-large">Learn more about the site &raquo;</a></p>
+</div>
+
+<div class="row">
+  <div class="span3">
+    <h2>Theory</h2>
+    <p>Before using the model, we recommended reading the model theory, which describes the underlying equations and parameters used in the model.</p>
+    <p><a class="btn" href="/theory/">View the theory &raquo;</a></p>
+  </div>
+  <div class="span3">
+    <h2>Tutorial</h2>
+    <p>We have prepared a tutorial video that describes the process of using this web-based model.</p>
+    <p><a class="btn" href="#">View tutorial &raquo;</a></p>
+  </div>
+  <div class="span3">
+    <h2>Sign Up</h2>
+    <p>While a user account is not required to try the model, it is required to save model configurations and parameter values on the server. Registration is free and takes less than 5 minutes.</p>
+    <p><a class="btn" href="/accounts/register/">Go sign up &raquo;</a></p>
+  </div>
+  <div class="span3">
+    <h2>Try It!</h2>
+    <p>The model is available with or without a user account.</p>
+    <p><a class="btn" href="/client/">Try it out &raquo;</a></p>
+  </div>
+</div>
+{% endblock content %}

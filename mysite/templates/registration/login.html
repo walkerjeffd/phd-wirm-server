@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form class="form-account" method="post" action="#">
+  {% csrf_token %}
+  <h2 class="form-account-heading">Please sign in</h2>
+  {{ form.as_p }}
+  <input type="hidden" name="next" value="{{ next }}" />
+  <button class="btn btn-large btn-primary" type="submit">Sign in</button>
+  <hr>
+  <p>Don't have an account? <a href="/accounts/register/">Register</a>.</p>
+  <p>Forget your password? <a href="/accounts/password/reset/">Reset it</a>.</p>
+</form>
+
+{% endblock content %}

@@ -1,0 +1,97 @@
+/*****************
+** global style **
+*****************/
+
+body {
+  font-family: sans-serif;
+  padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+  padding-bottom: 60px;
+}
+
+@media (max-width: 979px) {
+  body {
+    padding-top: 0;
+  }
+}
+
+footer {
+  text-align: center;
+}
+
+#theory-content > h4:before { 
+  display: block; 
+  content: " "; 
+  margin-top: -60px; 
+  height: 60px; 
+  visibility: hidden; 
+}
+
+/*******************
+** controls style **
+*******************/
+
+#controls {
+  height:100px;
+}
+
+.param {
+  position:relative ;
+}
+
+.param-info {
+  position: absolute; 
+  right: 0;
+  top: 0;
+}
+
+.param-row {
+  padding: 5px 0;
+}
+
+.param-help {
+  float: right;
+}
+
+.slider {
+  margin: 5px 0 0 0;
+}
+
+.slider-range {
+  height: 30px;
+}
+
+.slider-min {
+  float:left ;
+}
+
+.slider-max {
+  float: right;
+}
+
+/*****************
+** d3/svg style **
+*****************/
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+  stroke-width: 1px;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+path {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 2px;
+}
+
+.legend line {
+  stroke-width: 2px;
+}

@@ -1,0 +1,94 @@
+{% load staticfiles %}
+{% load rest_framework %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>{% block title %}BOD/DO River Model{% endblock title %}</title>
+  
+  {% block style %}
+  <link rel="stylesheet" href="{% static "css/bootstrap-2.3.1.css" %}" media="screen">
+  <link rel="stylesheet" href="{% static "css/bootstrap-responsive-2.3.1.css" %}">
+  <link rel="stylesheet" href="{% static "css/jquery-ui-base-1.10.1.css" %}">
+  <link rel="stylesheet" href="{% static "css/base.css" %}">
+  {% endblock style %}
+
+  {% block head_scripts %}
+  {% endblock head_scripts %}
+    
+</head>
+<body>
+  {% block nav %}
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </a>
+
+        <a class="brand" href="/"><i class="icon-tint icon-white"></i> BOD River Model</a>
+
+        <div class="nav-collapse collapse">
+          <ul class="nav">
+            <li><a href="/#">Home</a></li>
+            <li><a href="/getting-started/">Getting Started</a></li>
+            <li><a href="/theory/">Theory</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Model <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="/client/#">New Project</a></li>
+                <li><a href="/client/#projects">Existing Projects</a></li>
+              </ul>
+            </li>
+            <li><a href="/api/">API</a></li>
+            <li><a href="/about/">About</a></li>
+          </ul>
+          <p class="navbar-text pull-right">
+            {% if user.is_authenticated %}
+              Logged in as {{ user }} | <a href="/accounts/logout/">Log Out</a>
+            {% else %}
+              <a href="/accounts/login/">Log In</a> | <a href="/accounts/register/">Sign Up</a>
+            {% endif %}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endblock nav %}
+  <div class="container">
+    <div id="content">
+    {% block content %}
+      
+    {% endblock content %}
+    </div>
+    <hr>
+    
+    <footer>
+    {% block footer %}
+    Site created, designed and maintained by <a href="mailto:jeff@walkerjeff.com">Jeffrey D. Walker</a><br />
+    <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/80x15.png" /></a> <br />
+    This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.
+    {% endblock footer %}
+    </footer>
+  </div>
+  
+  {% block scripts %}
+  <script src="{% static "js/lib/jquery-1.9.1.js" %}"></script>
+  <script src="{% static "js/lib/jquery-ui-1.10.1.js" %}"></script>
+  <script src="{% static "js/lib/bootstrap-2.3.1.js" %}"></script>
+  {% endblock scripts %}
+  
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-20715617-2', 'walkerjeff.com');
+  ga('send', 'pageview');
+  </script>
+</body>
+</html>
