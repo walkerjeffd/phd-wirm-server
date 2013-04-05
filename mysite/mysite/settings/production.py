@@ -6,7 +6,7 @@ TEMPLATE_DEBUG = DEBUG
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'river_walkerjeff_com',        # Or path to database file if using sqlite3.
+        'NAME': 'wirm_walkerjeff_com',        # Or path to database file if using sqlite3.
         'USER': 'dj_walkerjeffcom',
         'PASSWORD': 'lu1ZkD9h3S4mjAGR7U0S',
         'HOST': 'mysql.walkerjeff.com',        # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.

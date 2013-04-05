@@ -27,3 +27,13 @@ class Project(models.Model):
 
     def __unicode__(self):
         return self.title
+
+
+class Comment(models.Model):
+    project = models.ForeignKey('Project', related_name='comments')
+    owner = models.ForeignKey('auth.User', related_name='comments')
+    created = models.DateTimeField(auto_now_add=True, default=None)
+    comment = models.TextField(max_length=500)
+
+    def __unicode__(self):
+        return "%s: %s..." % (self.owner.username, self.comment[:50])

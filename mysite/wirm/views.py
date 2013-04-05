@@ -1,4 +1,4 @@
-from wirm.models import Project, Parameter
+from wirm.models import Project, Parameter, Comment
 from wirm import serializers
 from wirm.permissions import IsOwnerOrReadOnly
 from rest_framework import generics
@@ -14,7 +14,8 @@ def api_root(request, format=None):
     return Response({
         'users': reverse('user-list', request=request, format=format),
         'parameters': reverse('parameters-list', request=request, format=format),
-        'projects': reverse('projects-list', request=request, format=format)
+        'projects': reverse('projects-list', request=request, format=format),
+        # 'comments': reverse('comment-list', request=request, format=format)
     })
 
 
@@ -79,3 +80,45 @@ class UserDetail(generics.RetrieveAPIView):
     """
     model = User
     serializer_class = serializers.UserSerializer
+
+
+class CommentList(generics.ListCreateAPIView):
+    """
+    List all comments.
+    """
+    model = Comment
+    serializer_class = serializers.CommentSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
+    def pre_save(self, obj):
+        obj.owner = self.request.user
+
+    def get_queryset(self):
+        """
+        This view should return a list of all comments for
+        the project pk as determined by the project_pk portion of the URL.
+        """
+        project_pk = self.kwargs['project_pk']
+        return Comment.objects.filter(project__pk=project_pk)
+
+
+class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Retrieve single comment.
+    """
+    model = Comment
+    serializer_class = serializers.CommentSerializer
+    pk_url_kwarg = 'comment_pk'
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+                          IsOwnerOrReadOnly)
+
+    def get_queryset(self):
+        """
+        This view should return a list of all comments for
+        the project pk as determined by the project_pk portion of the URL.
+        """
+        print(self.kwargs)
+        project_pk = self.kwargs['project_pk']
+        comment = Comment.objects.filter(project__pk=project_pk)
+        print(comment)
+        return comment

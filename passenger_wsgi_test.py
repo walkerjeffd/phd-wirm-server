@@ -1,6 +1,6 @@
 import sys, os, django
 
-sys.path.append("/home/walkerjeffd/river.walkerjeff.com/mysite/")
+sys.path.append("/home/walkerjeffd/wirm.walkerjeff.com/mysite/")
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'mysite.settings.production'
 
