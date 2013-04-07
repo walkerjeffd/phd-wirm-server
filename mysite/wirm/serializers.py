@@ -32,7 +32,7 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
         model = Project
         read_only_fields = ('created', 'updated', 'owner')
         fields = ('id', 'url', 'title', 'location', 'description',
-                  'created', 'updated', 'owner', 'parameter_values')
+                  'created', 'updated', 'owner', 'parameter_values', 'comments')
 
 
 class ProjectDetailSerializer(serializers.HyperlinkedModelSerializer):
@@ -42,6 +42,7 @@ class ProjectDetailSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Project
+        read_only_fields = ('created', 'updated', 'owner')
         fields = ('id', 'url', 'title', 'location', 'description',
                   'created', 'updated', 'owner', 'parameter_values', 'comments')
 
