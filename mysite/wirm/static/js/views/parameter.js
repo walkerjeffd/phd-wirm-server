@@ -1,9 +1,8 @@
-App.Views.ParametersView = Backbone.View.extend({
+App.Views.ParametersTab = Backbone.View.extend({
   initialize: function(options) {
     console.log('INIT: parameters view');
     var view = this;
     this.parameters = options.parameters;
-
     this.listenToOnce(this.parameters, 'sync', this.render);
   },
 

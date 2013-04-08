@@ -23,7 +23,8 @@ App.Views.Dashboard = Backbone.View.extend({
       parameters: this.parameters,
       compute: App.Simulations.StreeterPhelps
     });
-    this.subViews.parametersView = new App.Views.ParametersView({parameters: this.parameters});
+    this.subViews.tabsView = new App.Views.Tabs({project: this.project, parameters: this.parameters});
+
     this.render();
   },
 
@@ -36,7 +37,39 @@ App.Views.Dashboard = Backbone.View.extend({
     this.subViews.projectInfo.setElement(this.$('#project-info')).render();
     this.subViews.controls.setElement(this.$('#controls')).render();
     this.subViews.simulationView.setElement(this.$('#chart-container')).render().update();
-    this.subViews.parametersView.setElement(this.$('#param-container')).render();
+    this.subViews.tabsView.setElement(this.$('#param-container')).render();
+
     return this;
   }
 });
+
+App.Views.Tabs = Backbone.View.extend({
+  template: App.template('template-tabs'),
+
+  initialize: function(options) {
+    console.log('INIT: tabs');
+    this.parameters = options.parameters;
+    this.project = options.project;
+    this.comments = new App.Collections.Comments(this.project.get('comments'), {project: this.project} );
+
+    this.subViews = {};
+    this.subViews.parametersTab = new App.Views.ParametersTab({parameters: this.parameters});
+    this.subViews.commentTab = new App.Views.CommentTab({collection: this.comments});
+
+    this.listenTo(this.project, 'change:comments', this.updateComments);
+  },
+
+  updateComments: function() {
+    this.comments.reset(this.project.get('comments'));
+  },
+
+  render: function() {
+    console.log('RENDER: tabs');
+    this.$el.html( this.template() );
+    this.subViews.parametersTab.setElement(this.$('#tab-param')).render();
+    this.subViews.commentTab.setElement(this.$('#tab-comments')).render();
+    return this;
+  }
+});
+
+

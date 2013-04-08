@@ -6,7 +6,8 @@ App.Models.Project = Backbone.Model.extend({
     location: '',
     description: '',
     parameter_values: '',
-    owner: null
+    owner: null,
+    comments: []
   },
 
   validate: function(attrs) {
