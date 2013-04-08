@@ -66,7 +66,13 @@
   </div>
 </div>
 </script>
-
+<script type="text/template" id="template-comment">
+<form class="form-inline">
+  <input name="comment" type="text" id="id_comment" placeholder="Enter your comment...">
+  <button id="submit-comment" class="btn btn-primary">Submit</button>
+</form>
+<div class="comment-list-container"></div>
+</script>
 <script type="text/template" id="template-parameter-label">
   <span class="param-label"><%= title %> (<%= units %>)</span>: <span class="param-value"><%= value %></span>
   <a href="/theory/#<%= key %>" class="btn btn-mini btn-success param-help">Help</a>
@@ -88,16 +94,23 @@
   <li class="active">
     <a href="#tab-param" data-toggle="tab">Parameters</a>
   </li>
-  <li><a href="#tab-optimize" data-toggle="tab">Optimize</a></li>
   <li><a href="#tab-comments" data-toggle="tab">Comments</a></li>
 </ul>
 <div class="tab-content">
   <div class="tab-pane fade active in" id="tab-param"></div>
-  <div class="tab-pane fade" id="tab-optimize"></div>
   <div class="tab-pane fade" id="tab-comments"></div>
 </div>
 </script>
 
+<script type="text/template" id="template-comment-item">
+<div class="comment-header">
+  <span class="comment-owner"><%= owner %></span> • 
+  <span class="comment-time"><%= formatCreated %></span>
+  <button class="btn btn-mini btn-delete" style="float:right;"><i class="icon-trash"></i> delete</button>
+</div>
+<div class="comment-text"><%= comment %></div>
+<hr>
+</script>
 
 {% endblock content %}
 
@@ -107,6 +120,7 @@
   <script src="{% static "js/lib/backbone-1.0.0.js" %}"></script>
   <script src="{% static "js/lib/d3-3.0.8.js" %}"></script>
   <script src="{% static "js/lib/numeric-1.2.6.js" %}"></script>
+  <script src="{% static "js/lib/moment-2.0.0.js" %}"></script>
     
   <script src="{% static "js/utils.js" %}"></script>
   <script src="{% static "js/app.js" %}"></script>

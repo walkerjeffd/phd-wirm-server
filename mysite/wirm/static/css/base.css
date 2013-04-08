@@ -68,6 +68,33 @@ footer {
   float: right;
 }
 
+.comment-list-container {
+  height: 300px;
+  overflow: auto;
+  overflow-x: hidden;
+}
+
+ul.comment-list {
+  margin: 5px;
+}
+
+li.comment-item {
+  list-style-type:none;
+  padding-left: 0;
+}
+
+.comment-owner {
+  font-weight: bold;
+}
+
+.comment-time {
+  color: #aaaaaa;
+}
+
+.comment-text {
+  padding-left: 10px;
+}
+
 /*****************
 ** d3/svg style **
 *****************/

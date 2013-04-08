@@ -28,7 +28,7 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     #                                              view_name='user-detail',
     #                                              format='html')
     owner = serializers.Field(source='owner.username')
-    comments = CommentSerializer(many=True)
+    comments = CommentSerializer(many=True, required=False)
 
     class Meta:
         model = Project
@@ -40,7 +40,7 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
 class ProjectDetailSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.Field()
     owner = serializers.Field(source='owner.username')
-    comments = CommentSerializer(many=True)
+    comments = CommentSerializer(many=True, required=False)
 
     class Meta:
         model = Project

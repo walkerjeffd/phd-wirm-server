@@ -57,9 +57,11 @@ App.Views.Tabs = Backbone.View.extend({
     this.subViews.commentTab = new App.Views.CommentTab({collection: this.comments});
 
     this.listenTo(this.project, 'change:comments', this.updateComments);
+    this.listenTo(this.project, 'sync', this.updateComments);
   },
 
   updateComments: function() {
+    console.log('Updating comments');
     this.comments.reset(this.project.get('comments'));
   },
 
