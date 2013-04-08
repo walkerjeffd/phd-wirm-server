@@ -46,7 +46,7 @@ class ProjectList(generics.ListCreateAPIView):
     def get_queryset(self):
         user = self.request.user
         if (user.is_anonymous()):
-            return Project.objects.all()
+            return []
         return Project.objects.filter(owner=user)
 
     def pre_save(self, obj):
@@ -91,6 +91,9 @@ class CommentList(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
     def pre_save(self, obj):
+        project_pk = self.kwargs['project_pk']
+        print('Saving comment to project: ' + project_pk)
+        obj.project = Project.objects.get(pk=project_pk)
         obj.owner = self.request.user
 
     def get_queryset(self):
@@ -117,8 +120,6 @@ class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
         This view should return a list of all comments for
         the project pk as determined by the project_pk portion of the URL.
         """
-        print(self.kwargs)
         project_pk = self.kwargs['project_pk']
         comment = Comment.objects.filter(project__pk=project_pk)
-        print(comment)
         return comment

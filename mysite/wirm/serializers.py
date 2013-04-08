@@ -5,9 +5,11 @@ from django.contrib.auth.models import User
 
 class CommentSerializer(serializers.ModelSerializer):
     id = serializers.Field()
+    owner = serializers.Field(source='owner.username')
 
     class Meta:
         model = Comment
+        read_only_fields = ('id', 'project', 'owner', 'created')
         fields = ('id', 'project', 'owner', 'created', 'comment')
 
 
