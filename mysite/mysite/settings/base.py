@@ -1,7 +1,7 @@
 # Django settings for mysite project.
 
 ADMINS = (
-    ('Administrator', 'admin@river.walkerjeff.com'),
+    ('Administrator', 'admin@wirm.walkerjeff.com'),
 )
 
 MANAGERS = ADMINS
@@ -131,10 +131,10 @@ ACCOUNT_ACTIVATION_DAYS = 7
 REGISTRATION_OPEN = True
 # email settings for activation emails
 EMAIL_HOST = 'mail.walkerjeff.com'
-EMAIL_HOST_USER = 'activation@river.walkerjeff.com'
-EMAIL_HOST_PASSWORD = 'VFKA9VNc'
-DEFAULT_FROM_EMAIL = 'activation@river.walkerjeff.com'
-SERVER_EMAIL = 'activation@river.walkerjeff.com'
+EMAIL_HOST_USER = 'activation@wirm.walkerjeff.com'
+EMAIL_HOST_PASSWORD = 'p#XVk-25'
+DEFAULT_FROM_EMAIL = 'activation@wirm.walkerjeff.com'
+SERVER_EMAIL = 'activation@wirm.walkerjeff.com'
 
 # contrib.auth
 LOGIN_REDIRECT_URL = "/"
