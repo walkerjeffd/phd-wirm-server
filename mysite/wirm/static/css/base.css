@@ -68,6 +68,15 @@ footer {
   float: right;
 }
 
+.project-buttons {
+  padding: 5px 0;
+}
+
+li.project-item {
+  list-style-type:none;
+  padding-left: 0;
+}
+
 .comment-list-container {
   height: 300px;
   overflow: auto;

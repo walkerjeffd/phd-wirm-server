@@ -18,7 +18,7 @@ App.Router.Workspace = Backbone.Router.extend({
     this.dashboard = new App.Views.Dashboard({parameters: this.parameters, project: this.project});
 
     // set up project list view
-    this.projectListView = new App.Views.ProjectList({collection: this.projects});
+    this.projectContainer = new App.Views.ProjectContainer({collection: this.projects});
 
     // fetch default parameters
     this.parameters.fetch();
@@ -61,7 +61,7 @@ App.Router.Workspace = Backbone.Router.extend({
 
   projectList: function() {
     console.log('ROUTE: project list');
-    this.projectListView.setElement(this.el);
+    this.projectContainer.setElement(this.el).render();
     this.projects.fetch();
   },
 

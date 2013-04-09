@@ -38,10 +38,10 @@ App.Views.Controls = Backbone.View.extend({
       // project already exists
       if (App.user === this.project.get('owner')) {
         // current user owns project
-        this.project.save('parameter_values', this.parameters.getKeyValuePairs(), {
+        this.project.save({parameter_values: this.parameters.getKeyValuePairs()}, {
           success: function() {
-            // view.showStatus('success', 'Success: Parameter values saved');
-            App.vent.trigger('status', 'success', 'Success: Parameter values saved');
+            console.log('success');
+            App.vent.trigger('status', 'success', 'Success: Project saved');
           }
         });
       } else {

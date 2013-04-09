@@ -55,32 +55,41 @@ App.Views.ProjectInfo = Backbone.View.extend({
 });
 
 // project list
-App.Views.ProjectList = Backbone.View.extend({
-  template: App.template('template-project-list'),
+App.Views.ProjectContainer = Backbone.View.extend({
+  template: App.template('template-project-container'),
 
   initialize: function() {
     console.log('INIT: project list view');
-
-    this.listenTo(this.collection, 'sync', this.render);
+    this.subViews = {};
+    this.subViews.projectList = new App.Views.ProjectList({collection: this.collection});
+    this.listenTo(this.collection, 'sync add remove change', this.render);
   },
+
+  render: function() {
+    this.$el.html( this.template() );
+    if (!(App.router.isAuthenticated())) {
+      this.$el.append('<p>You must be logged in to view existing projects. Click here to <a href="/accounts/login/">log in</a> or <a href="/accounts/register/">sign up</a>.</p>');
+    } else if (this.collection.isEmpty()) {
+      this.$el.append('<p>You have no existing projects. <a href="#">Click here</a> to start a new project</p>');
+    } else {
+      this.$el.append(this.subViews.projectList.render().el);
+    }
+  }
+});
+
+App.Views.ProjectList = Backbone.View.extend({
+  tagName: 'ul',
+
+  className: 'project-list',
 
   render: function() {
     console.log('RENDER: project list view');
     var view = this;
-    this.$el.html( this.template() );
-    console.log(App.router.isAuthenticated());
-    if (!(App.router.isAuthenticated())) {
-      this.$('.project-list').remove();
-      this.$el.append('<p>You must be logged in to view existing projects. Click here to <a href="/accounts/login/">log in</a> or <a href="/accounts/register/">sign up</a>.</p>');
-    } else if (this.collection.length > 0) {
-      this.$('.project-list').empty();
-      this.collection.each(function(project) {
-        view.$('.project-list').append(new App.Views.ProjectListItem({model: project}).render().el );
-      });
-    } else {
-      this.$('.project-list').remove();
-      this.$el.append('<p>You have no existing projects. <a href="#">Click here</a> to start a new project</p>');
-    }
+    this.$el.empty();
+    this.collection.each(function(project) {
+      var projectItem = new App.Views.ProjectListItem({model: project});
+      view.$el.append(projectItem.render().el );
+    });
     return this;
   }
 });
@@ -89,13 +98,29 @@ App.Views.ProjectList = Backbone.View.extend({
 App.Views.ProjectListItem = Backbone.View.extend({
   tagName: 'li',
 
+  className: 'project-item',
+
   model: App.Models.Project,
 
-  template: _.template('<a href="/client/#projects/<%= id %>"><%= title %></a>'),
+  template: App.template('template-project-item'),
+
+  events: {
+    'click .btn-delete': 'deleteProject'
+  },
 
   render: function() {
-    this.$el.html( this.template( this.model.toJSON() ) );
+    console.log('RENDER: project list item');
+    var context = this.model.toJSON();
+    context.created = moment(context.created).format('MMM D YYYY h:mm a');
+    context.updated = moment(context.updated).format('MMM D YYYY h:mm a');
+    context.createdFromNow = moment(context.created).fromNow();
+    context.updatedFromNow = moment(context.updated).fromNow();
+    this.$el.html( this.template( context ) );
     return this;
+  },
+
+  deleteProject: function() {
+    this.model.destroy();
   }
 });
 

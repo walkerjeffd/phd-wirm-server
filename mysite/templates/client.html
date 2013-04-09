@@ -66,6 +66,7 @@
   </div>
 </div>
 </script>
+
 <script type="text/template" id="template-comment">
 <form class="form-inline">
   <input name="comment" type="text" id="id_comment" placeholder="Enter your comment...">
@@ -73,16 +74,31 @@
 </form>
 <div class="comment-list-container"></div>
 </script>
+
 <script type="text/template" id="template-parameter-label">
   <span class="param-label"><%= title %> (<%= units %>)</span>: <span class="param-value"><%= value %></span>
   <a href="/theory/#<%= key %>" class="btn btn-mini btn-success param-help">Help</a>
 </script>
 
-<script type="text/template" id="template-project-list">
+<script type="text/template" id="template-project-container">
 <h1>Existing Projects</h1>
-<ul class="project-list">
-</ul>
 </script>
+
+<script type="text/template" id="template-project-item">
+<hr>
+<h4><a href="/client/#projects/<%= id %>"><%= title %></a></h4>
+<ul>
+  <li>Created: <%= created %> (<%= createdFromNow %>)</li>
+  <li>Updated: <%= updated %> (<%= updatedFromNow %>)</li>
+  <li>Location: <%= location %></li>
+  <li>Description: <%= description %></li>
+</ul>
+<div class='project-buttons'>
+  <a class="btn btn-small btn-success btn-load" href="#projects/<%= id %>"><i class="icon-circle-arrow-right icon-white"></i> Load</a>
+  <button class="btn btn-small btn-danger btn-delete"><i class="icon-trash icon-white"></i> Delete</button>
+</div>
+</script>
+
 
 <script type="text/template" id="template-error">
 <h1><%= title %></h1>
@@ -106,7 +122,7 @@
 <div class="comment-header">
   <span class="comment-owner"><%= owner %></span> • 
   <span class="comment-time"><%= formatCreated %></span>
-  <button class="btn btn-mini btn-delete" style="float:right;"><i class="icon-trash"></i> delete</button>
+  <button class="btn btn-mini btn-delete btn-danger" style="float:right;"><i class="icon-trash icon-white"></i> Delete</button>
 </div>
 <div class="comment-text"><%= comment %></div>
 <hr>
