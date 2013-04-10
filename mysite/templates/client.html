@@ -41,9 +41,26 @@
 <div class="btn-toolbar">
   <div class="btn btn-primary btn-save"><i class="icon-check icon-white"></i> Save</div>
   <div class="btn btn-reset"><i class="icon-refresh"></i> Reset</div>
+  <div class="btn btn-share btn-info" style="float:right;"><i class="icon-share icon-white"></i> Share</div>
 </div>
 <div class="alert">
   <span id="status"></span>
+</div>
+</script>
+
+<script type="text/template" id="template-share">
+<div id="shareModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="shareModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="shareModalLabel">Share project</h3>
+  </div>
+  <div class="modal-body">
+    <p>To share this project, simply send this URL to your colleagues.</p>
+    <input type="text" class="input-xlarge" value="<%= url %>">
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-close" data-dismiss="modal" aria-hidden="true">Close</button>
+  </div>
 </div>
 </script>
 

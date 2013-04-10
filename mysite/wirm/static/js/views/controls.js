@@ -3,7 +3,8 @@ App.Views.Controls = Backbone.View.extend({
 
   events: {
     "click .btn-save": "saveProject",
-    "click .btn-reset": "resetParameters"
+    "click .btn-reset": "resetParameters",
+    "click .btn-share": "shareProject"
   },
 
   initialize: function(options) {
@@ -18,6 +19,9 @@ App.Views.Controls = Backbone.View.extend({
     console.log('RENDER: controls');
     this.$el.html(this.template());
     this.delegateEvents();
+    if (this.project.isNew()) {
+      this.$('.btn-share').remove();
+    }
     this.$('.alert').hide();
     return this;
   },
@@ -64,5 +68,39 @@ App.Views.Controls = Backbone.View.extend({
   resetParameters: function() {
     console.log('controls: reset parameters');
     App.vent.trigger('reset:parameters');
+  },
+
+  shareProject: function() {
+    console.log('Sharing project ' + this.project.get('id'));
+    var modal = new App.Views.ShareModal();
+  }
+});
+
+
+App.Views.ShareModal = Backbone.View.extend({
+  template: App.template('template-share'),
+
+  events: {
+    'click .close': 'close',
+    'click .btn-close': 'close'
+  },
+
+  initialize: function(options) {
+    console.log('INIT: share modal');
+    this.render();
+  },
+
+  render: function() {
+    console.log('RENDER: share modal');
+    this.$el.html( this.template( {url: location.href } ) );
+    $('body').append( this.el );
+    this.$('.modal').modal();
+    return this;
+  },
+
+  close: function() {
+    console.log('project modal: close');
+    this.$('.modal').modal('hide');
+    this.remove();
   }
 });
