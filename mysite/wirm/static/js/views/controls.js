@@ -58,11 +58,10 @@ App.Views.Controls = Backbone.View.extend({
   showStatus: function(statusType, message, delay) {
     delay = delay || 3000;
     this.$('.alert').clearQueue();
-    this.$('.alert').addClass('alert-' + statusType);
+    this.$('.alert').removeClass().addClass('alert alert-' + statusType);
     this.$('#status').html(message);
     this.$('.alert').show(0);
     this.$('.alert').delay(delay).fadeOut();
-    this.$('.alert').removeClass('alert' + statusType);
   },
 
   resetParameters: function() {

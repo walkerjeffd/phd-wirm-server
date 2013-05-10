@@ -105,14 +105,19 @@
 <hr>
 <h4><a href="/client/#projects/<%= id %>"><%= title %></a></h4>
 <ul>
-  <li>Created: <%= created %> (<%= createdFromNow %>)</li>
-  <li>Updated: <%= updated %> (<%= updatedFromNow %>)</li>
   <li>Location: <%= location %></li>
   <li>Description: <%= description %></li>
+  <li>Created: <%= created %> (<%= createdFromNow %>)</li>
+  <li>Updated: <%= updated %> (<%= updatedFromNow %>)</li>
 </ul>
-<div class='project-buttons'>
+<div class='project-buttons' style="position:relative">
   <a class="btn btn-small btn-success btn-load" href="#projects/<%= id %>"><i class="icon-circle-arrow-right icon-white"></i> Load</a>
   <button class="btn btn-small btn-danger btn-delete"><i class="icon-trash icon-white"></i> Delete</button>
+  <div class="alert alert-error" style="display:none; margin-top:10px; position:absolute; left:0px;">
+    <span>Are you sure?</span>
+    <div class="btn btn-danger btn-confirm">Yes</div>
+    <div class="btn btn-cancel">No</div>
+  </div>
 </div>
 </script>
 

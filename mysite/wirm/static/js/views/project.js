@@ -44,7 +44,7 @@ App.Views.ProjectInfo = Backbone.View.extend({
   deleteProject: function() {
     var view = this;
     console.log('controls: delete project ' + this.project.get('id'));
-    if (App.user === this.project.get('owner')) {
+    if (App.user === this.project.get('owner').username) {
       // current user owns project
       this.$('.alert').slideDown();
     } else {
@@ -111,16 +111,24 @@ App.Views.ProjectListItem = Backbone.View.extend({
   render: function() {
     console.log('RENDER: project list item');
     var context = this.model.toJSON();
+    var view = this;
     context.created = moment(context.created).format('MMM D YYYY h:mm a');
     context.updated = moment(context.updated).format('MMM D YYYY h:mm a');
     context.createdFromNow = moment(context.created).fromNow();
     context.updatedFromNow = moment(context.updated).fromNow();
     this.$el.html( this.template( context ) );
+    this.$('.alert').hide();
+    this.$('.alert .btn-confirm').on('click', function() {
+      view.model.destroy();
+    });
+    this.$('.alert .btn-cancel').on('click', function() {
+      view.$('.alert').toggle();
+    });
     return this;
   },
 
   deleteProject: function() {
-    this.model.destroy();
+    this.$('.alert').slideDown();
   }
 });
 
