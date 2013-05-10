@@ -7,15 +7,16 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
 
 
 @api_view(('GET',))
 def api_root(request, format=None):
     return Response({
-        'users': reverse('user-list', request=request, format=format),
+        'users': reverse('users-list', request=request, format=format),
         'parameters': reverse('parameters-list', request=request, format=format),
         'projects': reverse('projects-list', request=request, format=format),
-        # 'comments': reverse('comment-list', request=request, format=format)
+        'comments': reverse('comments-list', request=request, format=format),
     })
 
 
@@ -39,15 +40,15 @@ class ProjectList(generics.ListCreateAPIView):
     """
     Lists all projects or creates new project for current authenticated user.
     """
-    # model = Project
+    queryset = Project.objects.all()
     serializer_class = serializers.ProjectSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
-    def get_queryset(self):
-        user = self.request.user
-        if (user.is_anonymous()):
-            return []
-        return Project.objects.filter(owner=user)
+    # def get_queryset(self):
+        # user = self.request.user
+        # if (user.is_anonymous()):
+        #     return []
+        # return Project.objects.filter(owner=user)
 
     def pre_save(self, obj):
         obj.owner = self.request.user
@@ -57,20 +58,17 @@ class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
     """
     Retrieve, update or destroy a project.
     """
-    model = Project
+    queryset = Project.objects.all()
     serializer_class = serializers.ProjectDetailSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly)
-
-    def pre_save(self, obj):
-        obj.owner = self.request.user
 
 
 class UserList(generics.ListAPIView):
     """
     List all users.
     """
-    model = User
+    queryset = User.objects.all()
     serializer_class = serializers.UserSerializer
 
 
@@ -78,15 +76,32 @@ class UserDetail(generics.RetrieveAPIView):
     """
     Retrieve single user.
     """
-    model = User
-    serializer_class = serializers.UserSerializer
+    queryset = User.objects.all()
+    serializer_class = serializers.UserDetailSerializer
 
 
-class CommentList(generics.ListCreateAPIView):
+class CommentList(generics.ListAPIView):
     """
     List all comments.
     """
-    model = Comment
+    queryset = Comment.objects.all()
+    serializer_class = serializers.CommentSerializer
+    # permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
+
+class CommentDetail(generics.RetrieveAPIView):
+    """
+    Retrieve single comment.
+    """
+    queryset = Comment.objects.all()
+    serializer_class = serializers.CommentSerializer
+    # permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
+
+class ProjectCommentList(generics.ListCreateAPIView):
+    """
+    List all comments for a project.
+    """
     serializer_class = serializers.CommentSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
@@ -101,16 +116,15 @@ class CommentList(generics.ListCreateAPIView):
         the project pk as determined by the project_pk portion of the URL.
         """
         project_pk = self.kwargs['project_pk']
+        project = get_object_or_404(Project, pk=project_pk)
         return Comment.objects.filter(project__pk=project_pk)
 
 
-class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
+class ProjectCommentDetail(generics.RetrieveUpdateDestroyAPIView):
     """
-    Retrieve single comment.
+    Retrieve single comment for a project.
     """
-    model = Comment
     serializer_class = serializers.CommentSerializer
-    pk_url_kwarg = 'comment_pk'
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly)
 
@@ -120,5 +134,6 @@ class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
         the project pk as determined by the project_pk portion of the URL.
         """
         project_pk = self.kwargs['project_pk']
-        comment = Comment.objects.filter(project__pk=project_pk)
-        return comment
+        project = get_object_or_404(Project, pk=project_pk)
+        queryset = project.comments.all()
+        return queryset
