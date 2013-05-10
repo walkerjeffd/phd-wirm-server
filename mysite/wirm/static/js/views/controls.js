@@ -40,7 +40,7 @@ App.Views.Controls = Backbone.View.extend({
       }
     } else {
       // project already exists
-      if (App.user === this.project.get('owner')) {
+      if (App.user === this.project.get('owner').username) {
         // current user owns project
         this.project.save({parameter_values: this.parameters.getKeyValuePairs()}, {
           success: function() {

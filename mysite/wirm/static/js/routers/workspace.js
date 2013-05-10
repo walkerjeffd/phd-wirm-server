@@ -13,9 +13,10 @@ App.Router.Workspace = Backbone.Router.extend({
     this.project = new App.Models.Project();
     this.projects = new App.Collections.Projects();
     this.parameters = new App.Collections.Parameters();
+    this.comments = new App.Collections.Comments([], {project: this.project});
 
     // set up dashboard view
-    this.dashboard = new App.Views.Dashboard({parameters: this.parameters, project: this.project});
+    this.dashboard = new App.Views.Dashboard({parameters: this.parameters, project: this.project, comments: this.comments});
 
     // set up project list view
     this.projectContainer = new App.Views.ProjectContainer({collection: this.projects});
@@ -73,6 +74,7 @@ App.Router.Workspace = Backbone.Router.extend({
 
     this.project.fetch({
       success: function(model, response, options) {
+        that.comments.fetch();
         that.updateParameters();
         that.showDashboard();
       },

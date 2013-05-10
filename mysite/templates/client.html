@@ -13,7 +13,7 @@
 <div class="row">
   <div class="span6" id="chart-container">
   </div>
-  <div class="span6" id="param-container">
+  <div class="span6" id="tabs-container">
   </div>
 </div>
 </script>
@@ -127,17 +127,15 @@
   <li class="active">
     <a href="#tab-param" data-toggle="tab">Parameters</a>
   </li>
-  <li><a href="#tab-comments" data-toggle="tab">Comments</a></li>
 </ul>
 <div class="tab-content">
   <div class="tab-pane fade active in" id="tab-param"></div>
-  <div class="tab-pane fade" id="tab-comments"></div>
 </div>
 </script>
 
 <script type="text/template" id="template-comment-item">
 <div class="comment-header">
-  <span class="comment-owner"><%= owner %></span> • 
+  <span class="comment-owner"><%= owner.username %></span> • 
   <span class="comment-time"><%= formatCreated %></span>
   <button class="btn btn-mini btn-delete btn-danger" style="float:right;"><i class="icon-trash icon-white"></i> Delete</button>
 </div>

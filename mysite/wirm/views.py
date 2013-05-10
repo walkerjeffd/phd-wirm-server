@@ -59,7 +59,7 @@ class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
     Retrieve, update or destroy a project.
     """
     queryset = Project.objects.all()
-    serializer_class = serializers.ProjectDetailSerializer
+    serializer_class = serializers.ProjectSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly)
 

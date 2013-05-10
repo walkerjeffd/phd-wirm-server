@@ -6,6 +6,7 @@ App.Views.Dashboard = Backbone.View.extend({
 
     this.parameters = this.options.parameters;
     this.project = this.options.project;
+    this.comments = this.options.comments;
 
     // create sub-views
     this.subViews = {};
@@ -23,7 +24,7 @@ App.Views.Dashboard = Backbone.View.extend({
       parameters: this.parameters,
       compute: App.Simulations.StreeterPhelps
     });
-    this.subViews.tabsView = new App.Views.Tabs({project: this.project, parameters: this.parameters});
+    this.subViews.tabsView = new App.Views.Tabs({project: this.project, parameters: this.parameters, comments: this.comments});
 
     this.render();
   },
@@ -37,7 +38,7 @@ App.Views.Dashboard = Backbone.View.extend({
     this.subViews.projectInfo.setElement(this.$('#project-info')).render();
     this.subViews.controls.setElement(this.$('#controls')).render();
     this.subViews.simulationView.setElement(this.$('#chart-container')).render().update();
-    this.subViews.tabsView.setElement(this.$('#param-container')).render();
+    this.subViews.tabsView.setElement(this.$('#tabs-container')).render();
 
     return this;
   }
@@ -50,28 +51,35 @@ App.Views.Tabs = Backbone.View.extend({
     console.log('INIT: tabs');
     this.parameters = options.parameters;
     this.project = options.project;
-    this.comments = new App.Collections.Comments(this.project.get('comments'), {project: this.project} );
+    this.comments = options.comments;
 
     this.subViews = {};
     this.subViews.parametersTab = new App.Views.ParametersTab({parameters: this.parameters});
     this.subViews.commentTab = new App.Views.CommentTab({collection: this.comments});
 
-    this.listenTo(this.project, 'change:comments', this.updateComments);
-    this.listenTo(this.project, 'sync', this.updateComments);
+    // this.listenTo(this.project, 'change:comments', this.updateComments);
+    // this.listenTo(this.project, 'sync', this.updateComments);
   },
 
   updateComments: function() {
     console.log('Updating comments');
-    this.comments.reset(this.project.get('comments'));
+    // this.comments.reset(this.project.get('comments'));
+    // this.comments.fetch();
   },
 
   render: function() {
     console.log('RENDER: tabs');
     this.$el.html( this.template() );
+
     this.subViews.parametersTab.setElement(this.$('#tab-param')).render();
-    this.subViews.commentTab.setElement(this.$('#tab-comments')).render();
+
+    // if project is not new, add comments tab
+    if (!this.project.isNew()) {
+      this.$('ul.nav').append('<li><a href="#tab-comments" data-toggle="tab">Comments</a></li>');
+      this.$('.tab-content').append('<div class="tab-pane fade" id="tab-comments"></div>');
+      this.subViews.commentTab.setElement(this.$('#tab-comments')).render();
+    }
+    
     return this;
   }
 });
-
-

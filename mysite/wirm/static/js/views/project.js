@@ -32,7 +32,7 @@ App.Views.ProjectInfo = Backbone.View.extend({
 
   editProject: function() {
     console.log('controls: edit project ' + this.project.get('id'));
-    if (App.user === this.project.get('owner')) {
+    if (App.user === this.project.get('owner').username) {
       // current user owns project
       var projectModal = new App.Views.ProjectModal({project: this.project, parameters: this.parameters, title: 'Edit Project Info'});
     } else {
