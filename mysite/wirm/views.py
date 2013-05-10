@@ -39,7 +39,7 @@ class ProjectList(generics.ListCreateAPIView):
     """
     Lists all projects or creates new project for current authenticated user.
     """
-    model = Project
+    # model = Project
     serializer_class = serializers.ProjectSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
@@ -92,7 +92,6 @@ class CommentList(generics.ListCreateAPIView):
 
     def pre_save(self, obj):
         project_pk = self.kwargs['project_pk']
-        print('Saving comment to project: ' + project_pk)
         obj.project = Project.objects.get(pk=project_pk)
         obj.owner = self.request.user
 
