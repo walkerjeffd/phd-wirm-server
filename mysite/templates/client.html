@@ -195,8 +195,8 @@
     if (Modernizr.svg) {
       App.boot($('#content'));  
     } else {
-      $('#content').html('Browser does not support SVG');
-    }
+      $('#content').html('<div class="alert alert-danger"><h1>Error!</h1><p>Your browser does not support SVG graphics, which are required for this application. Please upgrade to the latest version of Internet Explorer, Chrome, Firefox, Safari, or Opera. The latest version of <a href="http://www.google.com/chrome">Chrome</a> is recommended for optimal performance.</p></div>');
+    };
     
   });
   </script>
