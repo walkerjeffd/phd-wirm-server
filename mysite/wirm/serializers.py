@@ -26,7 +26,7 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Comment
-        read_only_fields = ('project', 'owner')
+        read_only_fields = ('project',)
         fields = ('id', 'url', 'project', 'owner', 'created', 'comment')
 
 

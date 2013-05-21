@@ -1,6 +1,15 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 
+{% block title %}Client{% endblock title %}
+
+{% block head_scripts %}
+  <script type="text/javascript">
+    if (!window.console) console = {log: function() {}};
+  </script>
+  <script src="{% static "js/lib/modernizr.custom.92887.js" %}"></script>
+{% endblock head_scripts %}
+
 {% block content %}
 
 <script type="text/template" id="template-dashboard">
@@ -94,7 +103,7 @@
 
 <script type="text/template" id="template-parameter-label">
   <span class="param-label"><%= title %> (<%= units %>)</span>: <span class="param-value"><%= value %></span>
-  <a href="/theory/#<%= key %>" class="btn btn-mini btn-success param-help">Help</a>
+  <a href="/theory/#<%= key %>" target="_blank" class="btn btn-mini btn-success param-help">Help</a>
 </script>
 
 <script type="text/template" id="template-project-container">
@@ -183,7 +192,12 @@
     {% else %}
       App.user = null;
     {% endif %}
-    App.boot($('#content'));
+    if (Modernizr.svg) {
+      App.boot($('#content'));  
+    } else {
+      $('#content').html('Browser does not support SVG');
+    }
+    
   });
   </script>
 {% endblock scripts %}

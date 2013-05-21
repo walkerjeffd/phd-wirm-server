@@ -35,6 +35,10 @@ footer {
 ** controls style **
 *******************/
 
+.tab-content {
+  padding: 0px 10px;
+}
+
 #controls {
   height:100px;
 }

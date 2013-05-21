@@ -2,11 +2,54 @@
 
 {% block content %}
 
-<form class="form-account" action="#" method="post">
+<form class="form-account form-horizontal" action="#" method="post">
   {% csrf_token %}
   <h2 class="form-account-heading">Registration</h2>
-  {{ form.as_p }}
-  <button class="btn btn-large btn-primary" type="submit">Register</button>
+  {% if form.non_field_errors %}
+    {% for error in form.non_field_errors %}
+      <div class="alert alert-error" style="width:400px">{{ error }}</div>
+    {%endfor%}
+  {% endif %}
+  {% for field in form %}
+    {% if field.errors %}
+      <div class="alert alert-error" style="width:400px">{{field.label}}: 
+        {% for error in field.errors %}
+          {{ error }}
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endfor %}
+
+  <div class="control-group">
+    <label class="control-label" for="id_username">Username</label>
+    <div class="controls">
+      <input class="required" id="id_username" maxlength="30" name="username" type="text" />
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="id_email">E-mail</label>
+    <div class="controls">
+      <input class="required" id="id_email" maxlength="75" name="email" type="text" />
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="id_password1">Password</label>
+    <div class="controls">
+      <input class="required" id="id_password1" name="password1" type="password" />
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="id_password2">Password (again)</label>
+    <div class="controls">
+      <input class="required" id="id_password2" name="password2" type="password" />
+    </div>
+  </div>
+  <div class="control-group">
+    <div class="controls">
+      <button class="btn btn-large btn-primary" type="submit">Register</button>
+    </div>
+  </div>
+  
   <hr>
   <p>Already have an account? <a href="/accounts/login/">Log in</a>.</p>
 </form>
