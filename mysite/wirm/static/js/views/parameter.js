@@ -60,6 +60,7 @@ App.Views.ParameterSlider = Backbone.View.extend({
 
   initialize: function() {
     this.$el.slider( this.model.toJSON() );
+    this.$el.slider( 'option', 'step', 0.1);
     this.listenTo(this.model, 'change:value', this.render);
   },
 

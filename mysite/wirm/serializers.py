@@ -34,7 +34,7 @@ class ParameterSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Parameter
         fields = ('id', 'url', 'key', 'title', 'units', 'description',
-                  'value', 'min', 'max', 'step')
+                  'value', 'min', 'max', 'group')
 
 
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):

@@ -3,6 +3,10 @@ from jsonfield import JSONField
 
 
 class Parameter(models.Model):
+    PARAMETER_GROUP_CHOICES = (
+        ('basic', 'Basic'),
+        ('advanced', 'Advanced'),
+    )
     key = models.CharField(blank=False, max_length=10)
     title = models.CharField(blank=False, max_length=50)
     description = models.TextField()
@@ -10,7 +14,7 @@ class Parameter(models.Model):
     value = models.FloatField()
     min = models.FloatField(default=0.0)
     max = models.FloatField()
-    step = models.FloatField(default=0.01)
+    group = models.CharField(choices=PARAMETER_GROUP_CHOICES, default='basic', max_length=20)
 
     def __unicode__(self):
         return '%s (%s)' % (self.title, self.units)
