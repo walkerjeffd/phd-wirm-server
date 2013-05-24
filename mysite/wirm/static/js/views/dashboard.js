@@ -54,7 +54,10 @@ App.Views.Tabs = Backbone.View.extend({
     this.comments = options.comments;
 
     this.subViews = {};
-    this.subViews.parametersTab = new App.Views.ParametersTab({parameters: this.parameters});
+    // this.subViews.basicTab = new App.Views.ParametersTab({parameters: this.parameters});
+    this.subViews.basicTab = new App.Views.ParametersTab({parameters: this.parameters, group: 'basic'});
+    this.subViews.advancedTab = new App.Views.ParametersTab({parameters: this.parameters, group: 'advanced'});
+
     this.subViews.commentTab = new App.Views.CommentTab({collection: this.comments});
 
     // this.listenTo(this.project, 'change:comments', this.updateComments);
@@ -71,7 +74,8 @@ App.Views.Tabs = Backbone.View.extend({
     console.log('RENDER: tabs');
     this.$el.html( this.template() );
 
-    this.subViews.parametersTab.setElement(this.$('#tab-param')).render();
+    this.subViews.basicTab.setElement(this.$('#tab-param-basic')).render();
+    this.subViews.advancedTab.setElement(this.$('#tab-param-advanced')).render();
 
     // if project is not new, add comments tab
     if (!this.project.isNew()) {

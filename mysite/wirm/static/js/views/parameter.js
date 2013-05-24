@@ -3,6 +3,7 @@ App.Views.ParametersTab = Backbone.View.extend({
     console.log('INIT: parameters view');
     var view = this;
     this.parameters = options.parameters;
+    this.group = options.group;
     this.listenToOnce(this.parameters, 'sync', this.render);
   },
 
@@ -10,10 +11,11 @@ App.Views.ParametersTab = Backbone.View.extend({
     console.log('RENDER: parameters view');
     var view = this;
     this.$el.empty();
-    this.parameters.each(function(parameter) {
-      var parameterContainer = new App.Views.ParameterContainer({model: parameter});
-      view.$el.append(parameterContainer.el);
-    });
+    var basicParameters = this.parameters.filter(function (model) { return model.get('group')===view.group;});
+    _.each(basicParameters, function(parameter) {
+        var parameterContainer = new App.Views.ParameterContainer({model: parameter});
+        view.$el.append(parameterContainer.el);
+      });
     return this;
   }
 });
@@ -60,7 +62,8 @@ App.Views.ParameterSlider = Backbone.View.extend({
 
   initialize: function() {
     this.$el.slider( this.model.toJSON() );
-    this.$el.slider( 'option', 'step', 0.1);
+    var max = this.model.get('max');
+    this.$el.slider( 'option', 'step', Math.pow(10,Math.round(Math.log(max)/Math.log(10))-2));
     this.listenTo(this.model, 'change:value', this.render);
   },
 
