@@ -38,17 +38,17 @@ class ParameterDetail(generics.RetrieveAPIView):
 
 class ProjectList(generics.ListCreateAPIView):
     """
-    Lists all projects or creates new project for current authenticated user.
+    Lists saved projects or create new project for current authenticated user.
     """
-    queryset = Project.objects.all()
+    # queryset = Project.objects.all()
     serializer_class = serializers.ProjectSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
-    # def get_queryset(self):
-        # user = self.request.user
-        # if (user.is_anonymous()):
-        #     return []
-        # return Project.objects.filter(owner=user)
+    def get_queryset(self):
+        user = self.request.user
+        if (user.is_anonymous()):
+            return []
+        return Project.objects.filter(owner=user)
 
     def pre_save(self, obj):
         obj.owner = self.request.user

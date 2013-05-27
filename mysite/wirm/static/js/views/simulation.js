@@ -123,14 +123,18 @@ App.Simulations.StreeterPhelps = function(parameters) {
 
   var BOD = {'key': 'BOD',
              'geom': 'line',
+             // 'color': 'red',
              'data': d3.zip(soln.t.map(function(d) { return d*(U*86.4); }),
                             soln.y.map(function(d) { return d[0]; }))};
   var DO = {'key': 'DO',
             'geom': 'line',
+            // 'color': 'blue',
             'data': d3.zip(soln.t.map(function(d) { return d*(U*86.4); }),
                            soln.y.map(function(d) { return d[1]; }))};
   var DO_sat = {'key': 'DO_sat',
             'geom': 'line',
+            'color': 'black',
+            'dashed': true,
             'data': [[0, o_s],[soln.t[soln.t.length-1]*U*86.4, o_s]]
           };
   return [BOD, DO, DO_sat];
