@@ -62,8 +62,9 @@ App.Views.ParameterSlider = Backbone.View.extend({
 
   initialize: function() {
     this.$el.slider( this.model.toJSON() );
-    var max = this.model.get('max');
-    this.$el.slider( 'option', 'step', Math.pow(10,Math.round(Math.log(max)/Math.log(10))-2));
+    var max = this.model.get('max'),
+        min = this.model.get('min');
+    this.$el.slider( 'option', 'step', Math.pow(10,Math.round(Math.log(max-min)/Math.log(10))-2));
     this.listenTo(this.model, 'change:value', this.render);
   },
 

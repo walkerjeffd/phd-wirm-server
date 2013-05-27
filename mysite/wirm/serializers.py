@@ -33,7 +33,7 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
 class ParameterSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Parameter
-        fields = ('id', 'url', 'key', 'title', 'units', 'description',
+        fields = ('id', 'url', 'key', 'title', 'units',
                   'value', 'min', 'max', 'group')
 
 

@@ -9,7 +9,6 @@ class Parameter(models.Model):
     )
     key = models.CharField(blank=False, max_length=10)
     title = models.CharField(blank=False, max_length=50)
-    description = models.TextField()
     units = models.CharField(max_length=20)
     value = models.FloatField()
     min = models.FloatField(default=0.0)

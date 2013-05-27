@@ -18,7 +18,8 @@ App.Views.Dashboard = Backbone.View.extend({
         width: 500,
         height: 300,
         color: d3.scale.category10(),
-        xLabel: 'Travel Time (days)',
+        // xLabel: 'Travel Time (days)',
+        xLabel: 'Distance Downstream (km)',
         yLabel: 'Concentration (mg/L)'
       },
       parameters: this.parameters,
