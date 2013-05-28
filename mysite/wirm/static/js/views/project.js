@@ -27,6 +27,7 @@ App.Views.ProjectInfo = Backbone.View.extend({
     this.$('.alert .btn-cancel').on('click', function() {
       view.$('.alert').toggle();
     });
+    
     return this;
   },
 
