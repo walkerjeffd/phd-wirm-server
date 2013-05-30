@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}Tutorial{% endblock title %}
+
+{% block style %}
+  {{ block.super }}
+  <style>
+  h3 {
+    margin-top: 0;
+  }
+  .span10 {
+    margin-top: 10px;
+  }
+  </style>
+{% endblock style %}
+
+
+{% block content %}
+<h1>Tutorial</h1>
+<hr>
+<div class="row">
+  <div class="span2">
+    <h3>Introduction</h3>
+  </div>
+  <div class="span10">
+    <p>Before using WIRM, this tutorial will walk you through the steps for properly using the model to better understand how best to use it.</p>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="span2">
+    <h3>Setting Up a New Project</h3>
+  </div>
+  <div class="span10">
+    <p>The first step is to set up a new project. A project is a defined as an application of the model to a specific river or stream under specific conditoins. For example, one project may represent the Mississippi River under low flow conditions when a wastewater treatment plant is discharging a typical load. Another project could represent the same river under different conditions such as high flow and reduced wastewater discharge.</p>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="span2">
+    <h3>Saving a Project</h3>  
+  </div>
+  <div class="span10">
+    <ul>
+      <li>Save Button</li>
+      <li>Project Info</li>
+    </ul>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="span2">
+    <h3>Loading a Saved Project</h3>
+  </div>
+  <div class="span10">
+    <ul>
+      <li>Saved Projects List</li>
+      <li>URL Access</li>
+    </ul>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="span2">
+    <h3>Modified a Saved Project</h3>
+  </div>
+  <div class="span10">
+    <ul>
+      <li>Change parameters</li>
+      <li>Reset button</li>
+      <li></li>
+    </ul>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="span2">
+    <h3>Collaboration</h3>
+  </div>
+  <div class="span10">
+    <ul>
+      <li>Share Saved Project</li>
+      <li>Comments</li>
+    </ul>
+  </div>
+</div>
+{% endblock content %}

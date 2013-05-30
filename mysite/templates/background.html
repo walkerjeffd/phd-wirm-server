@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}Background{% endblock title %}
+
+{% block content %}
+<h1>Background</h1>
+<p>Welcome to the Web-based Interactive River Model (WIRM), a web application created to demonstrate the use of modern web technologies for web-based simulation of environmental systems. The application was designed to provide a highly interactive simulation interface using only standard web technologies eliminating the need for third-party browser plug-ins (e.g. Java applets, Flash). Read more about the architecture of the website on the <a href="/about/">About</a> page.</p>
+<hr>
+<div class="row">
+  <div class="span2">
+    <h3>Modelling Process</h3>
+  </div>
+  <div class="span10">
+    <h4>What are simulation models?</h4>
+    <p>Simulation models are commonly used by scientists and engineers to study environmental systems such as lakes, rivers, forests, grasslands, etc. Some people might think of models as miniature versions of real systems (think model airplanes or model trains), and indeed, some researchers do create so-called physical models that are small-scale replicas of environmental systems. But environmental systems are incredibly complex, involving dynamic interactions between many physical, chemical, biological and even socioeconomic processes. Representing all of these complex processes in a physical model is virtually impossible, and so scientists and engineers use mathematical equations to represent these systems and processes.</p>
+    <hr>
+    <h4>Why use Simulation Models?</h4>
+    While traditional scientific experiments are sometimes used to study environmental systems, oftentimes it is not feasible to perform experiments on real systems, especially large systems like entire watersheds or oceans. By using simulation models, scientists and engineers can study the behavior of environmental systems using so-called "numerical experiments." Once a model is created and tested, it can be used to study what happens when parts of the system are changed. For example, a model of a watershed can be used to predict what will happen to the amount of streamflow when rainfall patterns change due to climate change, and what might those changes do to the native fish populations.</p>
+    <hr>
+    <h4>How are simulation models used to make decisions?</h4>
+    <p>Simulation models allow scientists and engineers to investigate "what if" scenarios, helping us better understand what effects humans are having on environmental systems and what management actions or policies would be most effective in reducing our impacts and protecting these important ecosystems.</p>
+    <p>Management decisions for water quality problems are primarily based on the question: how much of a given pollutant can be discharged to a waterbody without having unacceptable negative impacts? This question is often answered by using a simulation model that let's the user lower the amount of pollution until it has a minimal (or acceptable) impact.</p>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="span2">
+    <h3>Scientific Background</h3>
+  </div>
+  <div class="span10">
+    <p>The WIRM application simulates the effect of wastewater discharge (or similar types of <a href="http://en.wikipedia.org/wiki/Point_source_pollution">point source pollution</a>) on dissolved oxygen levels in rivers and streams. The underlying mathematical model is derived from one of the first water quality models known as the <a href="http://en.wikipedia.org/wiki/Streeter-Phelps_equation">Streeter-Phelps model</a> dating back to a study on the Ohio River in the 1925. This model was instrumental in understanding the effect of wastewater discharge on dissolved oxygen concentrations in rivers.</p>
+  </div>
+</div>
+
+{% endblock content %}

@@ -4,11 +4,15 @@
 {% block title %}Theory{% endblock title %}
 
 {% block style %}
-{{ block.super }}
-<style>
-
-
-</style>
+  {{ block.super }}
+  <style>
+  h3 {
+    margin-top: 0;
+  }
+  .span10 {
+    margin-top: 10px;
+  }
+  </style>
 {% endblock style %}
 
 {% block head_scripts %}
@@ -30,72 +34,151 @@ MathJax.Hub.Config({
 {% endblock head_scripts %}
 
 {% block content %}
-<div class="container-fluid">
-  <div class="row-fluid">
+<div class="container">
+  <h1>Model Theory</h1>
+  <hr>
+  <div class="row">
     <div class="span2">
-      <div class="well sidebar-nav" data-spy="affix" data-offset-top="0">
-        <ul class="nav nav-list">
-          <li class="active"><a href="#"><i class="icon-arrow-up"></i> Top</a></li>
-          <li class="nav-header">Theory</li>
-          <li><a href="#equations">Equations</a></li>
-          <li class="nav-header">Parameters</li>
-          <li><a href="#L_0">$L_0$</a></li>
-          <li><a href="#o_0">$o_0$</a></li>
-          <li><a href="#o_s">$o_s$</a></li>
-          <li><a href="#k_d">$k_d$</a></li>
-          <li><a href="#k_a">$k_a$</a></li>
-          <li><a href="#k_so">$k_{so}$</a></li>
-          <li class="nav-header">Solver</li>
-          <li><a href="#RK4">Runge-Kutta</a></li>
-          
-        </ul>
-      </div>
+      <h3>Introduction</h3>
     </div>
-    <div class="span10" id="theory-content">
-      <h1 id="equations">Model Theory</h1>
-        <p>The BOD/DO river model is modified version of the <a href="http://en.wikipedia.org/wiki/Streeter-Phelps_equation">Streeter-Phelps equation</a>. The model is defined as a system of two ordinary differential equations:</p>
-        <img src="{% static "img/model_diagram.png" %}" alt="" width="35%" height="35%" style="float:right;">
-        $$\frac{dL}{dt} = -F_{ox}k_dL$$
-        $$\frac{do}{dt} = -F_{ox}k_dL+k_a(o_s-o)$$
-        <p>where $L$ and $o$ are the concentrations of Biochemical Oxygen Demand (BOD) and Dissolved Oxygen (DO) (mg/L), respectively, $k_d$ is the BOD decay rate (1/d), $k_a$ is the DO reaeration rate (1/d), $o_s$ is the DO saturation concentration (mg/L), and $F_{ox}$ is the BOD/DO inhibition factor (-), which is defined as:</p>
-        $$F_{ox} = \frac{o}{k_{so} + o}$$
-        <p>where $k_{so}$ is the oxygen inhibition half-saturation constant (mg/L).</p>
-
-        <p>The equations are solved given the initial concentrations of BOD and DO:</p>
-        $$L(t=0) = L_0$$
-        $$o(t=0) = o_0$$
-        <p>There are thus six parameters that must be defined:</p>
-        <ul>
-          <li><a href="#L_0">$L_0$: Initial concentration of BOD (mg/L)</a></li>
-          <li><a href="#o_0">$o_0$: Initial concentration of DO (mg/L)</a></li>
-          <li><a href="#o_s">$o_s$: Saturation concentration of DO (mg/L)</a></li>
-          <li><a href="#k_d">$k_d$: BOD decay rate (1/d)</a></li>
-          <li><a href="#k_a">$k_a$: DO reaeration rate (1/d)</a></li>
-          <li><a href="#k_so">$k_{so}$: DO inhibition half-saturation rate (1/d)</a></li>
-        </ul>
-        <hr>
-        <h2>Parameters</h2>
-        <h4 id="L_0">$L_0$: Initial Concentration of BOD (mg/L)</h4>
-        <p>The initial concentration of <a href="http://en.wikipedia.org/wiki/Biochemical_oxygen_demand">Biochemical Oxygen Demand (BOD)</a> is the concentration at the upstream boundary. It is commonly computed at a point of discharge, such where wastewater effluent is discharged to a river. It can be computed as the flow-weighted sum of BOD concentrations upstream of the discharge point and of the discharge.</p>
-        <hr>
-        <h4 id="o_0">$o_0$: Initial Concentration of DO (mg/L)</h4>
-        <p>The initial concentration of <a href="http://en.wikipedia.org/wiki/Dissolved_oxygen">Dissolved Oxygen (DO)</a> is the concentration at the upstream boundary. It is commonly computed at a point of discharge, such where wastewater effluent is discharged to a river. It can be computed as the flow-weighted sum of DO concentrations upstream of the discharge point and of the discharge.</p>
-        <hr>
-        <h4 id="o_s">$o_s$: Saturation Concentration of DO (mg/L)</h4>
-        <p>The <a href="https://en.wikipedia.org/wiki/Oxygenation_(environmental)">saturation concentration of DO</a> the concentration at which the water is in equilibrium with the air. When the concentration in the water is greater than the saturation concentration, then DO will be transferred from the water to the air by simple gas exchange at a rate determined by the reaeration rate. The DO saturation concentration depends primarily on the water temperature, and possibly salinity and atmospheric pressure.</p>
-        <hr>
-        <h4 id="k_d">$k_d$: BOD decay rate (mg/L)</h4>
-        <p>The decay rate of BOD defines how fast the carbonaceous material decays. It assumes a first order decay process. The decay rate is primarily affected by the chemical composition of the carbonaceous material, as well as temperature. A typical range is 0.05 - 0.5 mg/L (EPA Rates and Constants)</p>
-        <hr>
-        <h4 id="k_a">$k_a$: DO reaeration rate (mg/L)</h4>
-        <p>The rate of DO reaeration is the rate at which oxygen is transferred between the water and the air. It is commonly estimated by various empirical models (e.g. Covar chart), and is primarily affected by the water depth, temperature, and amount of turbulence. More turbulent water typically has more bubble formation which facilitates gas exchange.</p>
-        <hr>
-        <h4 id="k_so">$k_{so}$: DO inhibition half-saturation constant (mg/L)</h4>
-        <p>The DO inhibition half-saturation constant is the DO concentration at which the BOD decay rate is reduced by 50%. It is based on Michaelis-Menton style kinetics.</p>
-        <hr>
-        <h2 id="RK4">Solver</h2>
-        <p>The equations are solved using the <a href="http://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods#Common_fourth-order_Runge.E2.80.93Kutta_method">Runge-Kutta 4th Order</a> numerical method.</p>
+    <div class="span10">
+      <p>WIRM is a modified version of the <a href="http://en.wikipedia.org/wiki/Streeter-Phelps_equation">Streeter-Phelps equation</a>, which is one of the first water quality models originally developed during a study of the Ohio River in the 1920s (<a href="http://dspace.udel.edu:8080/dspace/bitstream/handle/19716/1590/C%26EE148.pdf?sequence=2">Streeter and Phelps, 1925</a>). The model is used to simulate the effect of a Biochemical Oxygen Demand (BOD) point discharge on Dissolved Oxygen (DO) levels of rivers and streams.</p>
+      <h4>Dissolved Oxygen</h4>
+      <p>Although you may often think of it as a gas in the air, oxygen dissolves in water to become dissolved oxygen (DO), which is needed for the survival of fish and other aquatic oranisms. The minimum DO concentration varies by species and organism, but is typically between 4 and 6 mg/L. A number of physical, chemical and biological processes affect the concentration of DO in rivers and lakes. DO is consumed by many biological decomposition, but also produced by photosynthesis. Gas exchange between the water and the atmosphere also changes the concentration of DO, driving it towards a state of equilibrium. Chemical processes such as oxidation can also affect DO levels. In reality, there are countless processes that affect DO, but by focusing on the most important ones we can still gain a clear picture of the system dynamics controlling the levels of DO in a given river.</p>
+      <h4>Biochemical Oxygen Deman</h4>
+      <p>Before the invention of <a href="http://en.wikipedia.org/wiki/Sewage_treatment#Secondary_treatment">modern treatment technologies</a>, wastewater discharge contained high concentrations of organic compounds. When these organic compounds are released in the environment, they are decomposed by microbial organisms through a process called respiration, a process that requires the consumption of oxygen (similar to human respiration). The total amount of oxygen that is consumed by the process is referred to as the Biochemical Oxygen Demand (BOD). For example, if 8 mg/L of DO is required to consume all the organic compounds in a sample of water, then the concentration of BOD is 8 mg/L. Therefore, high concentrations of BOD result in the consumption of large amounts of oxygen due to microbial respiration. Futhermore, if the BOD concentration is greater than the DO concentration, then microbial respiration may consume all the available dissolved oxygen leaving fish and other organisms unable to survive.</p>
     </div>
   </div>
+  <hr>
+  <div class="row">
+    <div class="span2">
+      <h3>Schematic</h3>
+    </div>
+    <div class="span10">
+      <img src="{% static "img/model_diagram.png" %}" alt="" width="350" height="243">
+      <p>This figure shows a schematic diagram of the model, which includes two state variables - the concentrations of BOD and DO - subject to BOD decay, which reduces both BOD and DO, and DO reaeration, which is the exchange of oxygen between the water and air.</p>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="span2">
+      <h3>Model Output</h3>
+    </div>
+    <div class="span10">
+      <p>The model predicts the concentrations of BOD and DO along a stretch of river. The following figure shows an example output from the model.</p>
+      <img src="{% static "img/annotation.png" %}" alt="" width="530" height="412">
+      <p>The output shows three lines representing the concentrations of BOD, DO and DO saturation along the river from an intial discharge point (x=0).</p>
+      <p>The dip in the DO concentration is known as the <strong>DO sag</strong>, which is often observed downstream of point source discharges (e.g. wastewater treatment plant effluent). The DO sag results from the initial depletion of oxygen as water flows downstream from the discharge point. At some point, the DO reaches a minimum concentration and begins increasing as reaeration replenishes the oxygen lost by BOD decay. As the BOD becomes depleted, reaeration drives the DO concentration towards equilibrium with the air, and the DO level approaches the saturation concentration.</p>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="span2">
+      <h3>Equations</h3>
+    </div>
+    <div class="span10">
+      <p>The model is defined as a system of two ordinary differential equations:</p>
+      $$\frac{dL}{dt} = -F_{ox}k_dL$$
+      $$\frac{do}{dt} = -F_{ox}k_dL+k_a(o_s-o)$$
+      <p>where $L$ and $o$ are the concentrations of BOD and DO (mg/L), respectively, $k_d$ is the BOD decay rate (1/d), $k_a$ is the DO reaeration rate (1/d), $o_s$ is the DO saturation concentration (mg/L), and $F_{ox}$ is the BOD/DO inhibition factor (unitless).</p>
+      <p>The DO inhibition factor is a modification of the original Streeter-Phelps equation that limits the BOD decay rate when DO levels are low. Without this factor, the model can produce negative concentrations of DO, a result that is not physically possible. The inhibition factor is defined using Michaelis-Menton kinetics:</p>
+      $$F_{ox} = \frac{o}{k_{so} + o}$$
+      <p>where $k_{so}$ is the oxygen inhibition half-saturation constant (mg/L). When the concentration of DO is equal to the half-saturation constant ($o=k_{so}$), then the inhibition factor is $F_{ox}=0.5$ and the rate of BOD decay, $k_d$, is effectively reduced by 50%. As the DO concentration approaches 0 mg/L, the inhibition factor and BOD decay rates also approach 0 preventing further BOD decay when no oxygen is available.</p>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="span2">
+      <h3>Initial Conditions</h3>
+    </div>
+    <div class="span10">
+      <p>The equations are solved given the initial concentrations of BOD and DO:</p>
+      $$L(t=0) = L_0$$
+      $$o(t=0) = o_0$$  
+      <p>Using these initial conditions, the model can be solved for $L$ and $o$ as a function of travel time.</p>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="span2">
+      <h3>Numerical Method</h3>
+    </div>
+    <div class="span10">
+      <p>The equations are solved using the <a href="http://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods#Common_fourth-order_Runge.E2.80.93Kutta_method">Runge-Kutta 4th Order</a> numerical method.</p> 
+      <p>For a generic variable, $y$, with initial condition $y(t=0)=y_0$ and derivative function $f(t, y)=dy/dt$ the solution for $y(t)$ can be computed incrementally. If $h$ is the step size between each solution point, then:</p>
+      $$y(t+h) = y(t) + \frac{h}{6}(K_1+K_2+K_3+K_4)$$
+      where $K_1$, $K_2$, $K_3$, and $K_4$ are defined as:
+      $$
+      \begin{eqnarray}
+        K_1 & = & f(t, y(t)) \\\
+        K_2 & = & f(t + h/2, y(t) + h/2\cdot K_1) \\\
+        K_3 & = & f(t + h/2, y(t) + h/2\cdot K_2) \\\
+        K_4 & = & f(t + h, y(t) + h\cdot K_3)
+      \end{eqnarray}
+      $$
+      <p>This algorithm was used to compute the solution of the water quality model as the concentrations of BOD and DO as a function of travel time, $L(t)$ and $o(t)$, given the initial concentrations $L_0$ and $o_0$.</p>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="span2">
+      <h3>Travel Time and Distance</h3>
+    </div>
+    <div class="span10">
+      <p>While the equations above describe the concentrations of BOD and DO as functions of travel time, it is often more useful to express the concentrations as functions of distance downstream. Travel time can easily be converted to downstream distance given the velocity of the river flow:</p>
+      $$x = 86.4U t$$
+      <p>where $x$ is the distance downstream of the discharge point in kilometers, $U$ is the velocity in meters/second, $t$ is the travel time in days, and 86.4 is a unit conversion factor (86.4 km/day = 1 m/s).</p>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="span2">
+      <h3>Parameters</h3>
+    </div>
+    <div class="span10">
+      <h4>$L_0$: Initial Concentration of BOD (mg/L)</h4>
+      <p>The initial concentration of <a href="http://en.wikipedia.org/wiki/Biochemical_oxygen_demand">Biochemical Oxygen Demand (BOD)</a> is in-stream concentration after the discharge has mixed with the river. It can be computed as the flow-weighted mean concentration by:
+      $$L_0 = \frac{L_{ps}*Q_{ps} + L_{river}*Q_{river}}{Q_{ps}+Q_{river}}$$
+      <p>where $L_{ps}$ and $L_{river}$ are the concentrations of BOD in the discharge and in the river just upstream of the discharge point, and $Q_{ps}$ and $Q_{river}$ are the corresponding flows of the discharge and river.</p>
+      </p>
+      <hr>
+      <h4>$o_0$: Initial Concentration of DO (mg/L)</h4>
+      <p>Similar to $L_0$, the initial concentration of DO is the in-stream concentration after the discharge has mixed with the river.</p>
+      <hr>
+      <h4>$o_s$: Saturation Concentration of DO (mg/L)</h4>
+      <p>The <a href="https://en.wikipedia.org/wiki/Oxygenation_(environmental)">saturation concentration of DO</a> is the concentration at which the water is in equilibrium with the air. When the DO concentration is less than saturation, then the water is said to be under-saturated and oxygen from the air diffuses into the water. Similarly, when the DO level is greater than saturation the water is super-saturated and oxygen is released from the water.</p>
+      <p>The DO saturation concentration is automatically computed in WIRM according to the standard formula (Chapra, 1997):</p>
+      $$o_s = -139.34411 + \frac{1.575701\times 10^5}{T_a} - \frac{6.642308\times 10^7}{T_a^2} + \frac{1.243800\times 10^10}{T_a^3} -  \frac{8.621949\times 10^11}{T_a^4}$$
+      <p>where $T_a$ is the water temperature in degrees Kelvin ($T_a[K] = T[^\circ C] + 273.15$). The relationship between DO saturation and water temperature is illustrated in the following figure.</p>
+      <img src="{% static "img/saturation.png" %}" alt="" width="384" height="268">
+      <hr>
+      <h4>$k_d$: BOD decay rate(mg/L)</h4>
+      <p>The decay rate of BOD defines how fast the carbonaceous material decays due to microbial decomposition. The decay rate is primarily affected by the chemical composition of the carbonaceous material with more complex compounds taken longer to break down. The BOD decay rate is also affected by temperature, with the rate increasing as the temperature rises. To account for the effect of temperature, the BOD decay rate is computed by:</p>
+      $$k_d = k_{d,20}\theta_{BOD}^{ T-20}$$
+      <p>where $k_{d,20}$ is the decay rate at 20$^\circ$C, $\theta_{BOD}$ is the temperature correction factor, and $T$ is the water temperature (degC). The temperature correction factor, $\theta_{BOD}$, can be estimated from laboratory experiments, but a typical value of 1.047 is often used. The baseline decay rate at 20$^\circ$C typically ranges from 0.05-0.5 /day (EPA, 1985).</p>
+      <hr>
+      <h4>$k_a$: DO reaeration rate (mg/L)</h4>
+      <p>The rate of DO reaeration determines the rate at which oxygen is transferred between the water and the air when the DO concentration is above or below the saturation concentration. It is commonly estimated by empirical models.</p>
+      <p>The Cover chart is a often used to estimate the reaeration rate based on the depth and velocity of the river (<a href="https://play.google.com/books/reader?id=J0Jpe6q1GlcC&printsec=frontcover&output=reader&authuser=0&hl=en&pg=GBS.PA340">Covar, 1976</a>). The chart combines three empirical studies that were performed on streams of different characteristics. </p>
+      <img src="{% static "img/covar.png" %}" alt="" width="483" height="507">
+      <p>(extracted from <a href="http://nepis.epa.gov/Exe/ZyPURL.cgi?Dockey=9100R3IW.txt">EPA, 1985</a>)</p>
+      <p>The equations used in the Cover chart are:</p>
+      $$
+      k_{a,20} = \left\{ 
+        \begin{array}{l l}
+          5.32\ U^{0.67} H^{-1.85} & \quad \text{if $H \leq 0.61$ m} & \quad \text{Owens et al. (1964)} \\
+          3.93\ U^{0.5} H^{-1.5} & \quad \text{if $H > 0.61$ and $H > 4.15\cdot U^{2.71}$} & \quad \text{O'Connor and Dobbins (1958)} \\
+          5.026\ U^{0.969} H^{-1.673} & \quad \text{if $H > 0.61$ and $H <= 4.15\cdot U^{2.71}$} & \quad \text{Churchill et al. (1962)}
+        \end{array} \right.
+      $$
+      <p>where $U$ is the stream velocity (m/s) and H is the mean depth (m). Note that these equations are in the metric form, whereas the chart shows english units.</p>
+      <p>Similar to the BOD decay, the reaeration rate is also affected by temperature. The effective reaeration rate, $k_a$, is computed by:</p>
+      $$k_a = k_{a,20}\theta_{DO}^{ T-20}$$
+      <p>where $k_{a,20}$ is the decay rate at 20$^\circ$C estimated using the Covar chart, $\theta_{DO}$ is the temperature correction factor, and $T$ is the water temperature (degC). The temperature correction factor, $\theta_{DO}$, can be estimated from laboratory experiments, but a typical value of 1.024 is often used (Chapra, 1997).</p>
+      <hr>
+      <h4>$k_{so}$: DO inhibition half-saturation constant (mg/L)</h4>
+      <p>The DO inhibition half-saturation constant is the DO concentration at which the BOD decay rate is reduced by 50%.</p>  
+    </div>
+    
 </div>
 {% endblock content %}

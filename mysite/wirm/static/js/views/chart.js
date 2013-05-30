@@ -175,32 +175,30 @@ App.Chart = function() {
     lines.enter()
       .append('path')
       .attr('d', function (d) { return line(d.data); })
-      .style("stroke-dasharray", function(d) { return d.dashed ? ("3, 3") : ("1, 0"); })
-      .style('stroke', function (d) {return d.color || color(d.key);});
+      .style('stroke', function (d) {return color(d.key);});
     lines
       .attr('d', function (d) { return line(d.data); });
     lines.exit()
       .remove();
 
     legend.selectAll('line')
-        .data(geomData.lines)
+        .data(color.domain())
       .enter()
         .append('line')
         .attr('x1', function(d, i) { return (xScale.range()[1]-80*(i+1));} )
         .attr('x2', function(d, i) { return (xScale.range()[1]-80*(i+1)+15);} )
         .attr('y1', 0.5)
         .attr('y2', 0.5)
-        .style("stroke-dasharray", function(d) { return d.dashed ? ("3, 3") : ("1, 0"); })
-        .style('stroke', function(d) { return d.color || color(d.key);});
+        .style('stroke', function(d) { return color(d);});
 
     legend.selectAll('text')
-        .data(geomData.lines)
+        .data(color.domain())
       .enter()
         .append('text')
         .attr('x', function(d, i) { return (xScale.range()[1]-80*(i+1)+20);} )
         .attr('y', 4.5)
         .attr('text-anchor', 'start')
-        .text(function(d) {return d.key;});
+        .text(function(d) {return d;});
 
     return chart;
   };

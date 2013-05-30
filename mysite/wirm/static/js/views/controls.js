@@ -21,13 +21,8 @@ App.Views.Controls = Backbone.View.extend({
     this.delegateEvents();
     if (this.project.isNew()) {
       this.$('.btn-share').remove();
-      this.$('.btn-reset').tooltip({placement: 'bottom', trigger: 'hover', container: 'body', title: 'Reset parameters to default values'});
-    } else {
-      this.$('.btn-reset').tooltip({placement: 'bottom', trigger: 'hover', container: 'body', title: 'Reset parameters to last saved values'});
     }
     this.$('.alert').hide();
-    this.$('.btn-save').tooltip({placement: 'bottom', trigger: 'hover', container: 'body', title: 'Save to new project'});
-    this.$('.btn-share').tooltip({placement: 'bottom', trigger: 'hover', container: 'body', title: 'Share saved project with others'});
     return this;
   },
 

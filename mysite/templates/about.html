@@ -2,36 +2,75 @@
 
 {% block title %}About{% endblock title %}
 
+{% block style %}
+  {{ block.super }}
+  <style>
+  h3 {
+    margin-top: 0;
+  }
+  .span10 {
+    margin-top: 10px;
+  }
+  </style>
+{% endblock style %}
+
 {% block content %}
 <h1>About the site</h1>
 
 <p>This website is part of an on-going research project investigating advanced web-based approaches to environmental modeling and decision support. It is intended primarily as a demonstration of the use of modern web technologies to facilitate model understanding and collaboration. In particular, the use of JavaScript to compute numerical solutions to ordinary differential equations suggests that many models could, in theory, be ported to JavaScript for execution in the web browser.</p>
-
-<h2>Overview</h2>
-<p>This website is comprised of two primary components: the server and the client. Web servers are used to store data, deliver content (such as html documents and images), and handle user authentication. The majority of existing research into web-based modeling and decision support utilize the server as a computational engine for computing model solutions. However, for sufficiently simple models, we have demonstrated that moving the numerical computations from the server to the client reduces server load while improving user interactivity. Unfortunately, there is really only one language that can be used to code client-side: JavaScript. While it has long been thought to be an inferior, slow language, recent advances in JavaScript engines (such as Google's V8) have made it incredibly fast for certain tasks. Some report that JavaScript can run at the same speed as compiled C++.</p>
-
-<h2>Server-side Architecture</h2>
-<p>The server-side architecture is based on the Django web framework (version 1.5), which is written in Python. Django is a popular and stable framework that has been under active development for over 5 years. It is based on a number of philosophical principles such as DRY (Don't Repeat Yourself), and is designed to be easy to use and rapid to develop.</p>
-<p>In addition, this site utilizes a number of Django plug-ins including:
-<ul>
-  <li>Django Rest Framework for delivering a REST(ish) API to the model parameters and projects</li>
-  <li>Registration for user account registration</li>
-  <li>South for database management and schema migrations</li>
-</ul>
-</p>
 <hr>
-<h2>Client-side Architecture</h2>
-<p>The client-side web application that provides the user interface housed within the web browser is based on multiple JavaScript libraries including:
-<ul>
-  <li>JQuery for DOM manipulation</li>
-  <li>JQuery-ui plugin for providing slider widgets</li>
-  <li>Backbone.js for controlling the application flow and binding variables and data to elements on the page</li>
-  <li>Twitter Bootstrap for responsive layout and design that is cross-browser compatible</li>
-  <li>Numeric.js for providing vectorized array operations</li>
-  <li>D3.js for data visualization</li>
-  <li>Underscore.js for supporting Backbone and providing a JavaScript toolbox</li>
-  <li>MathJax.js for rendering equations using Latex-style code</li>
-</ul>
-</p>
+<div class="row">
+  <div class="span2">
+    <h3>Overview</h3>
+  </div>
+  <div class="span10">
+    <p>This website is comprised of two primary components: the server and the client. Web servers are used to store data, deliver content (such as html documents and images), and handle user authentication. The majority of existing research into web-based modeling and decision support utilize the server as a computational engine for computing model solutions. However, for sufficiently simple models, we have demonstrated that moving the numerical computations from the server to the client reduces server load while improving user interactivity. Unfortunately, there is really only one language that can be used to code client-side: JavaScript. While it has long been thought to be an inferior, slow language, recent advances in JavaScript engines (such as Google's V8) have made it incredibly fast for certain tasks. Some report that JavaScript can run at the same speed as compiled C++.</p>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="span2">
+    <h3>Server-side Architecture</h3>
+  </div>
+  <div class="span10">
+    <p>The server-side architecture is based on the Django web framework (version 1.5), which is written in Python. Django is a popular and stable framework that has been under active development for over 5 years. It is based on a number of philosophical principles such as DRY (Don't Repeat Yourself), and is designed to be easy to use and rapid to develop.</p>
+    <p>In addition, this site utilizes a number of Django plug-ins including:
+    <ul>
+      <li>Django Rest Framework for delivering a REST(ish) API to the model parameters and projects</li>
+      <li>Registration for user account registration</li>
+      <li>South for database management and schema migrations</li>
+    </ul>
+    </p>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="span2">
+    <h3>Client-side Architecture</h3>
+  </div>
+  <div class="span10">
+    <p>The client-side web application that provides the user interface housed within the web browser is based on multiple JavaScript libraries including:
+    <ul>
+      <li>JQuery for DOM manipulation</li>
+      <li>JQuery-ui plugin for providing slider widgets</li>
+      <li>Backbone.js for controlling the application flow and binding variables and data to elements on the page</li>
+      <li>Twitter Bootstrap for responsive layout and design that is cross-browser compatible</li>
+      <li>Numeric.js for providing vectorized array operations</li>
+      <li>D3.js for data visualization</li>
+      <li>Underscore.js for supporting Backbone and providing a JavaScript toolbox</li>
+      <li>MathJax.js for rendering equations using Latex-style code</li>
+    </ul>
+    </p>    
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="span2">
+    <h3>Disclaimer</h3>
+  </div>
+  <div class="span10">
+    <p>Use of this website is at your own risk. We accept no responsibilities for damages or liability...</p>
+  </div>
+</div>
 
 {% endblock content %}

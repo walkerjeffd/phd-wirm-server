@@ -27,7 +27,6 @@ App.Views.ProjectInfo = Backbone.View.extend({
     this.$('.alert .btn-cancel').on('click', function() {
       view.$('.alert').toggle();
     });
-    
     return this;
   },
 
@@ -69,9 +68,9 @@ App.Views.ProjectContainer = Backbone.View.extend({
   render: function() {
     this.$el.html( this.template() );
     if (!(App.router.isAuthenticated())) {
-      this.$el.append('<p>You must be logged in to view saved projects. Click here to <a href="/accounts/login/">log in</a> or <a href="/accounts/register/">sign up</a>.</p>');
+      this.$el.append('<p>You must be logged in to view existing projects. Click here to <a href="/accounts/login/">log in</a> or <a href="/accounts/register/">sign up</a>.</p>');
     } else if (this.collection.isEmpty()) {
-      this.$el.append('<p>You have no saved projects. <a href="#">Click here</a> to start a new project</p>');
+      this.$el.append('<p>You have no existing projects. <a href="#">Click here</a> to start a new project</p>');
     } else {
       this.$el.append(this.subViews.projectList.render().el);
     }

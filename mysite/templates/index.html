@@ -6,31 +6,31 @@
 {% block content %}
 <div class="hero-unit" style="position:relative;">
   <h1>Web-based Interactive River Model (WIRM)</h1>
-  <img src="{% static "img/chart_screenshot.png"%}" alt="Example Chart" width="350" height="215" style="float:right; border-radius:10px; margin-left:25px;">
-  <p>A simple water quality model for understanding the effects of pollution on dissolved oxygen levels in rivers and streams. This site was created as a demonstration of modern web application development, and how new technologies can be used to create interactive, easy-to-use environmental simulation models. It is intended primarily for educational purposes, but can be used for the analysis of real systems.</p>
-  <p><a href="/getting-started/" class="btn btn-primary btn-large">Get Started &raquo;</a></p>
+  <p>A simple water quality model for understanding the effects of pollution on dissolved oxygen levels in rivers and streams.</p>
+  <p>The purpose of this site is to demonstrate the use of modern web technologies to create interactive web applications for model simulation.</p>
+  <p><a href="/client/" class="btn btn-primary btn-large">Try it! &raquo;</a></p>
 </div>
 
 <div class="row">
   <div class="span3">
     <h2>Sign Up</h2>
-    <p>While an account is not required to use the model, it is required to save model configurations and parameter values to the server. Registration is free and takes less than 5 minutes.</p>
+    <p>Registration is free and lets you save model configurations and parameter values to the server.</p>
     <p><a class="btn" href="/accounts/register/">Sign up &raquo;</a></p>
   </div>
   <div class="span3">
     <h2>Theory</h2>
-    <p>The model theory page describes the underlying equations, parameters, and numerical method that govern the water quality simulation.</p>
-    <p><a class="btn" href="/theory/">View the theory &raquo;</a></p>
+    <p>Read about the theory behind the model including the scientific background, underlying equations, parameters, and numerical method used to simulate river water quality.</p>
+    <p><a class="btn" href="/theory/">Theory &raquo;</a></p>
   </div>
   <div class="span3">
-    <h2>Start Modeling</h2>
-    <p>If you already have an account or do not wish to save a model configuration to the server, and you understand the <a href="/theory/">theory</a> behind the model, then let's get started.</p>
-    <p><a class="btn" href="/client/">Start modeling &raquo;</a></p>
+    <h2>Tutorial</h2>
+    <p>Follow the tutorial to learn more about to use the WIRM interface.</p>
+    <p><a class="btn" href="/tutorial/">Tutorial &raquo;</a></p>
   </div>
   <div class="span3">
-    <h2>Read the Code</h2>
-    <p>The code behind this site is available as an open source project on Github.</p>
-    <p><a class="btn" href="/client/">Read the Code &raquo;</a></p>
-  </div>
+    <h2>Run Model</h2>
+    <p>Once you are familiar with the background theory and how to use the model, then its time to begin...</p>
+    <p><a class="btn" href="/client/">Start Modeling &raquo;</a></p>
+  </div>  
 </div>
 {% endblock content %}

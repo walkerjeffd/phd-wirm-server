@@ -14,8 +14,12 @@ def theory(request):
     return render(request, 'theory.html')
 
 
-def getting_started(request):
-    return render(request, 'getting_started.html')
+# def background(request):
+#     return render(request, 'background.html')
+
+
+def tutorial(request):
+    return render(request, 'tutorial.html')
 
 
 def about(request):
