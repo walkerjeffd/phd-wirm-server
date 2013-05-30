@@ -38,6 +38,7 @@ App.Views.Controls = Backbone.View.extend({
       // project is new
       if (App.router.isAuthenticated()) {
         // user is logged in
+        this.$('.btn-save').tooltip('hide');
         var projectModal = new App.Views.ProjectModal({project: this.project, parameters: this.parameters, parent: this});
       } else {
         // user is not logged in
