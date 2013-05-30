@@ -16,7 +16,7 @@ App.Views.Dashboard = Backbone.View.extend({
       el: this.$('#chart-container'),
       chartOptions: {
         width: 500,
-        height: 300,
+        height: 400,
         color: d3.scale.category10(),
         // xLabel: 'Travel Time (days)',
         xLabel: 'Distance Downstream (km)',
