@@ -13,12 +13,11 @@ class Migration(SchemaMigration):
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('key', self.gf('django.db.models.fields.CharField')(max_length=10)),
             ('title', self.gf('django.db.models.fields.CharField')(max_length=50)),
-            ('description', self.gf('django.db.models.fields.TextField')()),
             ('units', self.gf('django.db.models.fields.CharField')(max_length=20)),
             ('value', self.gf('django.db.models.fields.FloatField')()),
             ('min', self.gf('django.db.models.fields.FloatField')(default=0.0)),
             ('max', self.gf('django.db.models.fields.FloatField')()),
-            ('step', self.gf('django.db.models.fields.FloatField')(default=0.01)),
+            ('group', self.gf('django.db.models.fields.CharField')(default='basic', max_length=20)),
         ))
         db.send_create_signal(u'wirm', ['Parameter'])
 
@@ -35,6 +34,16 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal(u'wirm', ['Project'])
 
+        # Adding model 'Comment'
+        db.create_table(u'wirm_comment', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('project', self.gf('django.db.models.fields.related.ForeignKey')(related_name='comments', to=orm['wirm.Project'])),
+            ('owner', self.gf('django.db.models.fields.related.ForeignKey')(related_name='comments', to=orm['auth.User'])),
+            ('created', self.gf('django.db.models.fields.DateTimeField')(default=None, auto_now_add=True, blank=True)),
+            ('comment', self.gf('django.db.models.fields.TextField')(max_length=500)),
+        ))
+        db.send_create_signal(u'wirm', ['Comment'])
+
 
     def backwards(self, orm):
         # Deleting model 'Parameter'
@@ -42,6 +51,9 @@ class Migration(SchemaMigration):
 
         # Deleting model 'Project'
         db.delete_table(u'wirm_project')
+
+        # Deleting model 'Comment'
+        db.delete_table(u'wirm_comment')
 
 
     models = {
@@ -81,14 +93,21 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
+        u'wirm.comment': {
+            'Meta': {'object_name': 'Comment'},
+            'comment': ('django.db.models.fields.TextField', [], {'max_length': '500'}),
+            'created': ('django.db.models.fields.DateTimeField', [], {'default': 'None', 'auto_now_add': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'owner': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'comments'", 'to': u"orm['auth.User']"}),
+            'project': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'comments'", 'to': u"orm['wirm.Project']"})
+        },
         u'wirm.parameter': {
             'Meta': {'object_name': 'Parameter'},
-            'description': ('django.db.models.fields.TextField', [], {}),
+            'group': ('django.db.models.fields.CharField', [], {'default': "'basic'", 'max_length': '20'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'key': ('django.db.models.fields.CharField', [], {'max_length': '10'}),
             'max': ('django.db.models.fields.FloatField', [], {}),
             'min': ('django.db.models.fields.FloatField', [], {'default': '0.0'}),
-            'step': ('django.db.models.fields.FloatField', [], {'default': '0.01'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
             'units': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
             'value': ('django.db.models.fields.FloatField', [], {})
