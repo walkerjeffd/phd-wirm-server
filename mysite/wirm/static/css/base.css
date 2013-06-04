@@ -23,12 +23,21 @@ footer {
   margin-bottom: 20px;
 }
 
-#theory-content > h4:before { 
+.row-doc > .span9 > h4:before { 
   display: block; 
   content: " "; 
   margin-top: -60px; 
   height: 60px; 
-  visibility: hidden; 
+  visibility: hidden;
+}
+
+.row-doc > .span3 > h3 {
+  margin-top: 0;
+  text-align: center;
+}
+
+.row-doc > .span9 {
+  margin-top: 10px;
 }
 
 /*******************
