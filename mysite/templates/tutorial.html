@@ -37,7 +37,7 @@
     <ul>
       <li>Visit the URL: <a href="http://wirm.walkerjeff.com/client/">http://wirm.walkerjeff.com/client/</a></li>
       <li>
-        <p>Navigate to the <code>Model</code> &gt; <code>New Project</code> on the navigation bar</p>
+        <p>Click <code>Model</code> &gt; <code>New Project</code> on the navigation bar</p>
         <img src="{% static "img/tutorial/new_project.png" %}" alt="New Project" width="539" height="126">
       </li>
      </ul>
@@ -49,7 +49,15 @@
     <h3>New Project</h3>
   </div>
   <div class="span9">
-    <p>Once the application is loaded, you can begin a new project. A <strong>Project</strong> is an application of the model to a specific river under specific conditions. For example, one project may represent the Mississippi River under low flow conditions when a wastewater treatment plant is discharging a typical load. Another project could represent the same river under different conditions such as high flow and reduced wastewater discharge.</p>
+    <p>Once the application is loaded, the user is presented with the <strong>New Project</strong> interface. A <strong>Project</strong> is an application of the model for a specific river and under specific conditions. Each New Project is based on the default parameter values. The user needs to adjust each of these parameters based on the characteristics of the river of interest.</p>
+    <p>The model parameters are grouped into two tabs:</p>
+    <ul>
+      <li><strong>Basic</strong>: the basic parameters must all be defined by the user. These parameters are the minimum amount of information necessary to represent a unique river.</li>
+      <li><strong>Advanced</strong>: the advanced parameters should also be reviewed, but are more difficult to assign. For example, the BOD decay rate at 20C typically requires laboratory experiments of water samples to estimate.</li>
+    </ul>
+    <img src="{% static "img/tutorial/set_parameters.png" %}" alt="Set Parameters" width="594" height="483">
+    <p>Changes to the parameters values can be undone by clicking the <code>Reset</code> button, which resets the parameters to the default values.</p>
+    <img src="{% static "img/tutorial/reset_button.png" %}" alt="Reset Parameters" width="290" height="84">
   </div>
 </div>
 <hr>
@@ -58,47 +66,72 @@
     <h3>Saving a Project</h3>  
   </div>
   <div class="span9">
+    <p>Once the parameter values have been adjusted to match a specific river, the user can save the project to the server by clicking the <code>Save</code> button.</p>
+    <img src="{% static "img/tutorial/save_button.png" %}" alt="Save Project" width="278" height="114">
+    <hr>
+    <p>The user must then fill out the new project form by setting the <code>Title</code>, <code>Location</code> and <code>Description</code> of the project, and clicking the <code>Save</code> button.</p>
     <ul>
-      <li>Save Button</li>
-      <li>Project Info</li>
+      <li><strong>Title</strong>: short description used to identify the project such as the name of the river</li>
+      <li><strong>Location</strong>: the geographic location such as the state or country where the river is located</li>
+      <li><strong>Description</strong>: additional information about the project such as the name of the BOD discharge source, location of the simulated reach, or flow conditions used to define the model.</li>
     </ul>
+    <img src="{% static "img/tutorial/project_modal.png" %}" alt="New Project Form" width="565" height="450">
+    <p>After the project is saved to the server, the browser will automatically be redirected to the URL assigned to the new project.</p>
   </div>
 </div>
 <hr>
 <div class="row row-doc">
   <div class="span3">
-    <h3>Loading a Saved Project</h3>
+    <h3>Loading a Project</h3>
   </div>
   <div class="span9">
+    <p>A saved proejct can be loaded by either:</p>
     <ul>
-      <li>Saved Projects List</li>
-      <li>URL Access</li>
+      <li>Visiting the unique URL, for example http://wirm.walkerjeff.com/client/#projects/1</li>
+      <li>
+        <p>Click <code>Model</code> &gt; <code>Saved Projects</code> on the navigation bar</p>
+        <img src="{% static "img/tutorial/open_saved_project.png" %}" alt="Open Saved Project" width="527" height="120">
+      </li>
     </ul>
+    <hr>
+    <p>The Saved Projects page will list all existing projects that the user has saved to the server. A project can be loaded by clicking its title, or the <code>Load</code> button. Projects can also be deleted by clicking the <code>Delete</code> button. Note that this list only shows the projects created by the current user, and does not include projects created by other users.</p>
+    <img src="{% static "img/tutorial/saved_projects.png" %}" alt="Saved Projects List" width="971" height="269">
   </div>
 </div>
 <hr>
 <div class="row row-doc">
   <div class="span3">
-    <h3>Modified a Saved Project</h3>
+    <h3>Modifying a Saved Project</h3>
   </div>
   <div class="span9">
-    <ul>
-      <li>Change parameters</li>
-      <li>Reset button</li>
-      <li></li>
-    </ul>
+    <p>Existing project can only be modified by the user who created them (i.e. the "owner"). The owner can edit the project information by clicking the <code>Edit Project Info</code> button, delete the project by clicking the <code>Delete Project</code> button, or save changes to the parameter values by clicking the <code>Save</code> button. Other users may change the parameter values to investigate the parameter sensitivity or effect of changing initial discharge concentration, but they cannot save changes to the server.</p>
+    <img src="{% static "img/tutorial/project_info.png" %}" alt="Project Information" width="576" height="170">
+    <hr>
+    <p>Changes to the parameters values can be undone by clicking the <code>Reset</code> button, which resets the parameter values to the values that were last saved to the server.</p>
+    <img src="{% static "img/tutorial/reset_button.png" %}" alt="Reset Parameters" width="290" height="84">
   </div>
 </div>
 <hr>
 <div class="row row-doc">
   <div class="span3">
-    <h3>Collaboration</h3>
+    <h3>Comments</h3>
   </div>
   <div class="span9">
-    <ul>
-      <li>Share Saved Project</li>
-      <li>Comments</li>
-    </ul>
+    <p>Comments can be added to any saved project by clicking on the <code>Comments</code> tab. Any registered user can leave comments on any project.</p>
+    <img src="{% static "img/tutorial/comments.png" %}" alt="Comments" width="590" height="197">
+  </div>
+</div>
+<hr>
+<div class="row row-doc">
+  <div class="span3">
+    <h3>Sharing a Project</h3>
+  </div>
+  <div class="span9">
+    <p>Once a project has been saved to the server, it can be easily shared with other users by clicking the <code>Share</code> button.</p>
+    <img src="{% static "img/tutorial/share_button.png" %}" alt="Share Button" width="219" height="52">
+    <hr>
+    <p>The Share Project window provides a unique URL to the current project, which can be copied to the clipboard and pasted into an email or document. Other users can simple paste this URL into their browser and immediately load the saved project. Note that all projects are publically accessible and thus other users do not need to registor or log in to WIRM in order to view exisitng projects.</p>
+    <img src="{% static "img/tutorial/share_modal.png" %}" alt="Share Project" width="566" height="215">
   </div>
 </div>
 {% endblock content %}

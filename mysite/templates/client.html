@@ -81,10 +81,9 @@
   </div>
   <div class="modal-body">
     <div class="alert alert-error"></div>
-    <p><label for="id_title">Title:</label> <input name="title" type="text" id="id_title" value="<%=title%>"></p>
-    <p><label for="id_location">Geographic Location:</label> <input name="location" type="text" id="id_location" value="<%=location%>"></p>
-    <p><label for="id_description">Description:</label> <textarea cols="25" rows="5" name="description" id="id_description"><%=description%></textarea></p>
-    <!--<p><label for="id_parameter_values">Parameter Values:</label> <textarea cols="25" rows="5" name="parameter_values" id="id_parameter_values"><% print(JSON.stringify(arguments[0].parameter_values)) %></textarea></p>-->
+    <p><label for="id_title">Title:</label> <input class="input-xlarge" name="title" type="text" id="id_title" value="<%=title%>"></p>
+    <p><label for="id_location">Geographic Location:</label> <input class="input-xlarge" name="location" type="text" id="id_location" value="<%=location%>"></p>
+    <p><label for="id_description">Description:</label> <textarea class="input-xlarge" cols="150" rows="5" name="description" id="id_description"><%=description%></textarea></p>
   </div>
   <div class="modal-footer">
     <button class="btn btn-close" data-dismiss="modal" aria-hidden="true">Close</button>

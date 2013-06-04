@@ -4,11 +4,12 @@
 {% block title %}Theory{% endblock title %}
 
 {% block head_scripts %}
+<!--<script type="text/">-->
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
   displayAlign: 'left',
   tex2jax: {
-    inlineMath: [['$','$'], ['\\(','\\)']],
+    inlineMath: [['$','$']],
     processEscapes: true
   },
   "HTML-CSS": {
@@ -17,8 +18,7 @@ MathJax.Hub.Config({
 });
 </script>
 
-<script type="text/javascript"
-  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>  
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>  
 {% endblock head_scripts %}
 
 {% block content %}
