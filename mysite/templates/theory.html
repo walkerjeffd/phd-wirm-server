@@ -30,12 +30,37 @@ MathJax.Hub.Config({
       <h3>Introduction</h3>
     </div>
     <div class="span9">
-      <p>WIRM is a modified version of the <a href="http://en.wikipedia.org/wiki/Streeter-Phelps_equation">Streeter-Phelps equation</a>, which is one of the first water quality models originally developed during a study of the Ohio River in the 1920s (<a href="http://dspace.udel.edu:8080/dspace/bitstream/handle/19716/1590/C%26EE148.pdf?sequence=2">Streeter and Phelps, 1925</a>). The model is used to simulate the effect of a <a href="http://en.wikipedia.org/wiki/Sewage_treatment#Secondary_treatment">Biochemical Oxygen Demand (BOD)</a> point discharge on Dissolved Oxygen (DO) levels of rivers and streams.</p>
-      <h5>Dissolved Oxygen</h5>
-      <p>Although often thought of as a gas, oxygen readily dissolves into water where it is needed for the survival of various aquatic organisms such as fish. The minimum DO concentration varies by species and organism, but is typically between 4 and 6 mg/L. A number of physical, chemical and biological processes affect the concentration of DO in rivers and lakes. DO is consumed by many biological decomposition, but also produced by photosynthesis. Gas exchange between the water and the atmosphere also changes the concentration of DO, driving it towards a state of equilibrium. Chemical processes such as oxidation can also affect DO levels.</p>
-      <h5>Biochemical Oxygen Demand</h5>
-      <p>Before the invention of modern treatment technologies, wastewater effluent contained high concentrations of organic compounds. When these organic compounds are released in the environment, they are decomposed by microbial organisms and undergo chemical oxidation. The total amount of oxygen that is consumed by these processes is referred to as the Biochemical Oxygen Demand (BOD).</p>
-      <p>The concentration of BOD is often measured by placing a water sample in a dark bottle and measuring the change in dissolved oxygen over time. As the BOD decays, the oxygen is consumed by microbial and chemical processes. The total amount of oxygen that is lost over a specific period of time is then defined as the concentration of BOD. Typically, BOD is measured over a 5-day and referred to as the 5-day BOD (BOD5). The ultimate BOD (UBOD) is the total amount of BOD that would be measured if the experiment were conducted over a very long (effectively infinite) period.</p>
+      <p>WIRM is a modified version of the <a href="http://en.wikipedia.org/wiki/Streeter-Phelps_equation">Streeter-Phelps equation</a>, which is one of the first water quality models originally developed during a study of the Ohio River in the 1920s (<a href="http://dspace.udel.edu:8080/dspace/bitstream/handle/19716/1590/C%26EE148.pdf?sequence=2">Streeter and Phelps, 1925</a>). The model is used to simulate the effect of a <a href="http://en.wikipedia.org/wiki/Biochemical_oxygen_demand">Biochemical Oxygen Demand (BOD)</a> point discharge on <a href="https://en.wikipedia.org/wiki/Oxygenation_(environmental)">Dissolved Oxygen (DO)</a> levels of rivers and streams.</p>
+      <img src="{% static "img/theory/streeter_phelps.png" %}" alt="" width="628" height="481">
+      <p>Extracted from p. 18 of <a href="http://dspace.udel.edu:8080/dspace/bitstream/handle/19716/1590/C%26EE148.pdf?sequence=2">Streeter and Phelps (1925)</a></p>
+    </div>
+  </div>
+  <hr>
+  <div class="row row-doc">
+    <div class="span3">
+      <h3>DO and BOD</h3>
+    </div>
+    <div class="span9">
+      <h4>Dissolved Oxygen</h4>
+      <p>While often thought of as a gas, oxygen readily dissolves into water where it is needed for the survival of various aquatic organisms such as fish. The minimum DO concentration varies by species and organism, but is typically between 4 and 6 mg/L. A number of physical, chemical and biological processes affect the concentration of DO in aquatic ecosystems. DO is consumed by <a href="https://en.wikipedia.org/wiki/Cellular_respiration#Aerobic_respiration">microbial respiration</a>, but also produced by <a href="https://en.wikipedia.org/wiki/Photosynthesis">photosynthesis</a>. <a href="http://en.wikipedia.org/wiki/Water_oxygenation">Gas exchange</a> between the water and the atmosphere also changes the concentration of DO, driving it towards a state of equilibrium. Chemical processes such as <a href="http://en.wikipedia.org/wiki/Deoxygenation">deoxygenation</a> can also affect DO levels.</p>
+      <hr>
+      <h4>Biochemical Oxygen Demand</h4>
+      <p>Before the invention of modern treatment technologies, <a href="http://en.wikipedia.org/wiki/Sewage_treatment">wastewater effluent</a> contained high concentrations of organic compounds. When these organic compounds are released in the environment, they are decomposed by microbial organisms and undergo chemical deoxygenation. The total amount of oxygen that is consumed by these processes is referred to as the Biochemical Oxygen Demand (BOD).</p>
+      <p>The concentration of BOD is often <a href="http://en.wikipedia.org/wiki/Biochemical_oxygen_demand#The_BOD5_test">measured</a> by placing a water sample in a dark bottle and measuring the change in dissolved oxygen over time. As the BOD decays, the oxygen is consumed by microbial and chemical processes. The total amount of oxygen that is lost over a specific period of time is then defined as the concentration of BOD. Typically, BOD is measured over a 5-day and referred to as the 5-day BOD (BOD5). The ultimate BOD (UBOD) is the total amount of BOD that would be measured if the experiment were conducted over a very long (effectively infinite) period such that all BOD material is degraded.</p>
+    </div>
+  </div>
+  <hr>
+  <div class="row row-doc">
+    <div class="span3">
+      <h3>Model Interpretation</h3>
+    </div>
+    <div class="span9">
+      <p>Before discussing the model equations and parameters, it is useful to understand how to interpret the model output generated by the simulation. Here is an example using the default parameter values:</p>
+      <img src="{% static "img/tutorial/annotated_output.png" %}" alt="Annotated Output" width="530" height="412">
+      <p>The blue and orange lines represent the simulated concentrations of BOD and DO along a stretch of river. The chart also shows the DO saturation concentration as the dotted black line for reference. These concentrations represent a snapshot of the river at a single point in time.</p>
+      <p>The left side of the chart (x=0) represents the upstream end of the reach where BOD is being discharged into the river from a point source such as a wastewater treatment plant. Initially, the concentrations of BOD and DO decrease just downstream of the discharge as BOD undergoes microbial decomposition and chemical deoxygenation, which are processes that consume DO.</p>
+      <p>At some point downstream of the discharge, the DO concentration reaches a minimum value, often called the <strong>critical point</strong>. At this point, the rates of BOD decay and DO reaeration are balanced because the oxygen lost by BOD decomposition is being replenished by an equivalent amount of oxygen dissolving into the water from the air. Past the critical point, DO increases as the rate of reaeration exceeds the rate of BOD decay and more oxygen is dissolving into the water than is being consumed. Eventually, the BOD has been completely decomposed and its concentration approaches zero. Without any BOD decomposition, the DO level approaches the saturation concentration where it is in equilibrium with the air. The dip in the DO concentration is known as the <strong>DO sag</strong>, which is a characteristic curve often observed downstream of BOD discharges.</p>
+      <p>In this example, the minimum DO concentration is about 4 mg/L at a point 120 km downstream of the discharge. If the target minimum DO concentration were 5 mg/L, which is required by some fish species, then we conclude that the BOD concentration is too high to support aquatic life. Using the slider for the initial BOD concentration parameter, L0, we could identify how much the BOD concentration would need to be reduced in order to achieve a minimum DO concentration of 5 mg/L.</p>
     </div>
   </div>
   <hr>
@@ -78,7 +103,7 @@ MathJax.Hub.Config({
       <h3>Numerical Method</h3>
     </div>
     <div class="span9">
-      <p>Given the initial concentrations, the differential equations for BOD and DO as a function of travel time are solved using the <a href="http://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods#Common_fourth-order_Runge.E2.80.93Kutta_method">4th-order Runge-Kutta</a> numerical method.</p> 
+      <p>Given the initial concentrations, the differential equations for BOD and DO as a function of travel time are solved using the <a href="http://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods#Common_fourth-order_Runge.E2.80.93Kutta_method">4th-order Runge-Kutta</a> numerical method, which is an explicit, forward-stepping scheme.</p> 
       <p>For a generic variable, $y$, with initial condition $y(t=0)=y_0$ and derivative function $f(t, y)=dy/dt$ the solution for $y(t)$ can be computed incrementally. If $h$ is the step size between each solution point, then:</p>
       $$y(t+h) = y(t) + \frac{h}{6}(K_1+K_2+K_3+K_4)$$
       where $K_1$, $K_2$, $K_3$, and $K_4$ are defined as:
@@ -100,7 +125,7 @@ MathJax.Hub.Config({
     <div class="span9">
       <p>While the equations above describe the concentrations of BOD and DO as functions of travel time, it is often more useful to express the concentrations as functions of distance downstream. Travel time can easily be converted to downstream distance given the velocity of the river flow:</p>
       $$x = 86.4U t$$
-      <p>where $x$ is the distance downstream of the discharge point (km), $U$ is the velocity (m/s), $t$ is the travel time (days), and 86.4 is a unit conversion factor (86.4 km/day = 1 m/s).</p>
+      <p>where $x$ is the distance downstream of the discharge point (km), $U$ is the velocity (m/s), $t$ is the travel time (days), and $86.4$ is a unit conversion factor (86.4 km/day = 1 m/s).</p>
     </div>
   </div>
   <hr>
@@ -116,7 +141,7 @@ MathJax.Hub.Config({
       </ol>
       <p>To account for both these factors, the rate of BOD decay is computed by:</p>
       $$k_d = k_{d,20}\theta_{BOD}^{T-20}$$
-      <p>where $k_{d,20}$ is the base decay rate at 20$^\circ$C, $\theta_{BOD}$ is the temperature correction factor, and $T$ is the water temperature (degC). The base decay rate and temperature correction factor are discussed in more detail below.</p>
+      <p>where <a href="#k_d_20">$k_{d,20}$</a> is the base decay rate at 20$^\circ$C, <a href="#theta_BOD">$\theta_{BOD}$</a> is the temperature correction factor, and <a href="#T">$T$</a> is the water temperature (degC), which are further discussed below.</p>
     </div>
   </div>
   <hr>
@@ -127,7 +152,7 @@ MathJax.Hub.Config({
     <div class="span9">
       <p>The DO inhibition factor is a modification of the original Streeter-Phelps equation that limits the BOD decay rate when DO levels are low. Without this factor, the model can produce negative concentrations of DO, a result that is not physically possible. The inhibition factor is defined using Michaelis-Menton kinetics:</p>
       $$F_{ox} = \frac{o}{k_{so} + o}$$
-      <p>where $k_{so}$ is the oxygen inhibition half-saturation constant (mg/L). When the concentration of DO is equal to the half-saturation constant ($o=k_{so}$), then the inhibition factor is $F_{ox}=0.5$ and the rate of BOD decay, $k_d$, is effectively reduced by 50%. As the DO concentration approaches 0 mg/L, the inhibition factor and BOD decay rates also approach 0 preventing further BOD decay when no oxygen is available.</p>
+      <p>where <a href="#k_so">$k_{so}$</a> is the oxygen inhibition half-saturation constant (mg/L). When the concentration of DO is equal to the half-saturation constant ($o=k_{so}$), then the inhibition factor is $F_{ox}=0.5$ and the rate of BOD decay, $k_d$, is effectively reduced by 50%. As the DO concentration approaches 0 mg/L, the inhibition factor and BOD decay rates also approach 0 preventing further BOD decay when no oxygen is available.</p>
       <p>The following figure shows the relationship between $F_{ox}$ and $o$ for a half-saturation concentration $k_{so} = 1$ mg/L.</p>
       <img src="{% static "img/theory/inhibition_factor.png" %}" alt="" width="396" height="268">
     </div>
@@ -166,10 +191,11 @@ MathJax.Hub.Config({
           5.026\ U^{0.969} H^{-1.673} & \quad \text{if $H > 0.61$ and $H <= 4.15\cdot U^{2.71}$} & \quad \text{Churchill et al. (1962)}
         \end{array} \right.
       $$
-      <p>where $U$ is the stream velocity (m/s) and H is the mean depth (m). Note that these equations are in the metric form, whereas the chart shows english units.</p>
+      <p>where <a href="#U">$U$</a> is the stream velocity (m/s) and <a href="#H">$H$</a> is the mean depth (m). Note that these equations are in the metric form, whereas the chart shows english units.</p>
+      <hr>
       <p>Similar to the BOD decay, the reaeration rate is also affected by temperature. The effective reaeration rate, $k_a$, is computed by:</p>
       $$k_a = k_{a,20}\theta_{DO}^{ T-20}$$
-      <p>where $k_{a,20}$ is the decay rate at 20$^\circ$C estimated using the Covar chart, $\theta_{DO}$ is the temperature correction factor, and $T$ is the water temperature (degC). The temperature correction factor, $\theta_{DO}$, can be estimated from laboratory experiments, but a typical value of 1.024 is often used (Chapra, 1997; Thomann and Meuller, 1987).</p>
+      <p>where $k_{a,20}$ is the reaeration rate at 20$^\circ$C estimated using the Covar chart, <a href="#theta_DO">$\theta_{DO}$</a> is the temperature correction factor, and $T$ is the water temperature (degC).</p>
     </div>
   </div>
   <hr>
@@ -181,7 +207,7 @@ MathJax.Hub.Config({
       <h4 id="L_0">$L_0$: Initial Concentration of BOD (mg/L)</h4>
       <p>The initial concentration of BOD is the in-stream concentration after the discharge has fully mixed with the river. It can be computed as the flow-weighted mean concentration by:</p>
       $$L_0 = \frac{L_{ps}*Q_{ps} + L_{river}*Q_{river}}{Q_{ps}+Q_{river}}$$
-      <p>where $L_{ps}$ and $L_{river}$ are the concentrations of BOD in the discharge and in the river just upstream of the discharge point, and $Q_{ps}$ and $Q_{river}$ are the corresponding flows of the discharge and river. If there are no upstream pollution sources or inputs of BOD, it may be reasonable to assume that $Q_{river}=0$.</p>
+      <p>where $L_{ps}$ and $L_{river}$ are the concentrations of BOD in the discharge and in the river just upstream of the discharge point, and $Q_{ps}$ and $Q_{river}$ are the corresponding flows of the discharge and river. If there are no upstream pollution sources or inputs of BOD, it may be reasonable to assume that $L_{river}=0 \text{ mg/L}$.</p>
       <p>The following table provides some typical concentrations of wastewater effluent for various treatment technologies from Thomann and Mueller (1987).</p>
       <table class="table table-bordered">
         <thead>
@@ -276,10 +302,10 @@ MathJax.Hub.Config({
       <p>The DO inhibition half-saturation constant is the DO concentration at which the inhibition factor $F_{ox}=0.5$, and thus the BOD decay rate is effectively reduced by 50%. There are no general guidelines available for this parameter, but a typical value of 1 mg/L is recommended.</p>
       <hr>
       <h4 id="theta_BOD">$\theta_{BOD}$: BOD Decay Temperature Correction Factor (unitless)</h4>
-      <p>The BOD temperature correction factor, $\theta_{BOD}$, can be estimated from laboratory experiments, but a value of 1.047 is frequently used.</p>
+      <p>The BOD temperature correction factor, $\theta_{BOD}$, ranges from 1.02 to 1.09 depending on the composition of the BOD as well as the microbial community and availability of other chemical compounds. A typical value of 1.047 is frequently used (Chapra, 1997).</p>
       <hr>
       <h4 id="theta_DO">$\theta_{DO}$: DO Reaeration Temperature Correction Factor (unitless)</h4>
-      <p>The DO reaeration temperature correction factor, $\theta_{DO}$, can range from 1.005 to 1.030 depending on the amount of mixing in the river (Thomann and Mueller, 1987). A typical value of 1.024 is often used.</p>
+      <p>The DO reaeration temperature correction factor, $\theta_{DO}$, can range from 1.005 to 1.030 depending on the amount of mixing in the river (Thomann and Mueller, 1987). A typical value of 1.024 is often used (Chapra, 1997).</p>
     </div>
   </div>
   <hr>
@@ -290,10 +316,10 @@ MathJax.Hub.Config({
     <div class="span9">
       <p>The model described above is based on a number of assumptions:</p>
       <ul>
-        <li><strong>Steady State</strong>: model output represents a snapshot of the concentrations at a single point in time.</li>
+        <li><strong>Steady State</strong>: the model output represents a snapshot of the concentrations along the river at a single point in time. No dynamic processes such as rapid changes in flow or temperature are occuring.</li>
         <li><strong>Pollution Source</strong>: there is only one source of BOD to the river at the upstream boundary of the target reach (x=0).</li>
         <li><strong>Spatial Uniformity</strong>: the characteristics of the river (depth, velocity, temperature, etc.) are uniform over the simulated reach.</li>
-        <li><strong>Processes</strong>: the DO concentraiton is only affected by the two processes represented in the model (BOD decay and reaeration). Additional processes such as photosynthesis or sediment oxygen demand are assumed to have negligable effects compared to BOD decay and reaeration.</li>
+        <li><strong>Processes</strong>: the DO concentraiton is only affected by the two processes represented in the model (BOD decay and reaeration). Additional processes such as photosynthesis, sediment oxygen demand and nitrogenous oxygen demand are assumed to have negligable effects compared to BOD decay and reaeration.</li>
       </ul>
     </div>
   </div>

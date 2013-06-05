@@ -3,16 +3,16 @@
 {% block title %}About{% endblock title %}
 
 {% block content %}
-<h1>About the site</h1>
+<h1>About WIRM</h1>
 
-<p>This website is part of an on-going research project investigating advanced web-based approaches to environmental modeling and decision support. It is intended primarily as a demonstration of the use of modern web technologies to facilitate model understanding and collaboration. In particular, the use of JavaScript to compute numerical solutions to ordinary differential equations suggests that many models could, in theory, be ported to JavaScript for execution in the web browser.</p>
+<p>This website is part of an on-going research project at Tufts University investigating advanced web-based approaches to environmental modeling and decision support. It is intended primarily as a demonstration of the use of modern web technologies to improve model acessibility, understanding and collaboration. This research is being conducted by Jeff Walker, PhD Candidate, and Dr. Steve Chapra, Professor.</p>
 <hr>
 <div class="row row-doc">
   <div class="span3">
     <h3>Overview</h3>
   </div>
   <div class="span9">
-    <p>This website is comprised of two primary components: the server and the client. Web servers are used to store data, deliver content (such as html documents and images), and handle user authentication. The majority of existing research into web-based modeling and decision support utilize the server as a computational engine for computing model solutions. However, for sufficiently simple models, we have demonstrated that moving the numerical computations from the server to the client reduces server load while improving user interactivity. Unfortunately, there is really only one language that can be used to code client-side: JavaScript. While it has long been thought to be an inferior, slow language, recent advances in JavaScript engines (such as Google's V8) have made it incredibly fast for certain tasks. Some report that JavaScript can run at the same speed as compiled C++.</p>
+    <p>Website are comprised of two components: the server and the client. Web servers are used to store data, deliver content (such as html documents and images), and handle user authentication. The majority of existing research into web-based modeling and decision support utilize the server as a computational engine for computing model solutions. However, for sufficiently simple models, we have demonstrated that moving the numerical computations from the server to the client reduces server load while improving user interactivity. Unfortunately, there is really only one language that can be used to code client-side: JavaScript. While it has long been thought to be an inferior, slow language, recent advances in JavaScript engines (such as Google's V8) have made it incredibly fast for certain tasks. Some report that JavaScript can run at the same speed as compiled C++.</p>
   </div>
 </div>
 <hr>
@@ -21,7 +21,7 @@
     <h3>Server-side Architecture</h3>
   </div>
   <div class="span9">
-    <p>The server-side architecture is based on the Django web framework (version 1.5), which is written in Python. Django is a popular and stable framework that has been under active development for over 5 years. It is based on a number of philosophical principles such as DRY (Don't Repeat Yourself), and is designed to be easy to use and rapid to develop.</p>
+    <p>The server-side architecture was built using the <a href="https://www.djangoproject.com/">Django</a> web framework, which is " a high-level Python Web framework that encourages rapid development and clean, pragmatic design." Django is a popular and mature framework that has been under active development for over many years.</p>
     <p>In addition, this site utilizes a number of Django plug-ins including:
     <ul>
       <li>Django Rest Framework for delivering a REST(ish) API to the model parameters and projects</li>
@@ -57,7 +57,7 @@
     <h3>Disclaimer</h3>
   </div>
   <div class="span9">
-    <p>Use of this website is at your own risk. We accept no responsibilities for damages or liability...</p>
+    <p>Use of this website is at your own risk and assumes acceptance of terms described in the <a href="http://ourdisclaimer.com/?i=WIRM">disclaimer</a>.</p>
   </div>
 </div>
 
