@@ -40,10 +40,13 @@ footer {
   margin-top: 10px;
 }
 
+
 .row-doc > .span9 > img {
-  padding:1px;
-  border:1px solid #021a40;
-  background-color:#ddd;
+  margin: 10px 0px;
+}
+
+.row-doc > .span9 > img.boxed {
+  border:1px solid #aaaaaa;
 }
 
 /*******************
