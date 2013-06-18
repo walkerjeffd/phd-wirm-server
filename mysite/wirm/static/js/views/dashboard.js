@@ -18,12 +18,11 @@ App.Views.Dashboard = Backbone.View.extend({
         width: 500,
         height: 400,
         color: d3.scale.category10(),
-        // xLabel: 'Travel Time (days)',
         xLabel: 'Distance Downstream (km)',
         yLabel: 'Concentration (mg/L)'
       },
       parameters: this.parameters,
-      compute: App.Simulations.StreeterPhelps
+      engine: App.SimulationEngine
     });
     this.subViews.tabsView = new App.Views.Tabs({project: this.project, parameters: this.parameters, comments: this.comments});
 
