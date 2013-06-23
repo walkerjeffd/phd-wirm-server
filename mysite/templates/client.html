@@ -30,9 +30,9 @@
 <script type="text/template" id="template-project-info">
 <h1 id="project-title"><%= title %></h1>
 <div id="project-details" style="position:relative;">
-  <ul>
-    <li>Location: <%= location %></li>
-    <li>Description: <%= description %></li>
+  <ul class="project-info-list">
+    <li><strong>Location</strong>: <%= location %></li>
+    <li><strong>Description</strong>: <%= description %></li>
   </ul>
   <div class="btn-toolbar">
     <div class="btn btn-edit"><i class="icon-edit"></i> Edit Project Info</div>
@@ -50,7 +50,7 @@
 <div class="btn-toolbar">
   <div class="btn btn-primary btn-save"><i class="icon-check icon-white"></i> Save</div>
   <div class="btn btn-reset"><i class="icon-refresh"></i> Reset</div>
-  <div class="btn btn-share btn-info" style="float:right;"><i class="icon-share icon-white"></i> Share</div>
+  <div class="btn btn-share btn-info pull-right"><i class="icon-share icon-white"></i> Share</div>
 </div>
 <div class="alert">
   <span id="status"></span>
@@ -169,7 +169,7 @@
   <script src="{% static "js/lib/d3-3.0.8.js" %}"></script>
   <script src="{% static "js/lib/numeric-1.2.6.js" %}"></script>
   <script src="{% static "js/lib/moment-2.0.0.js" %}"></script>
-  <script src="{% static "js/wirm-0.9.1.min.js" %}"></script>
+  <script src="{% static "js/wirm-0.9.2.js" %}"></script>
     
 
   <script>

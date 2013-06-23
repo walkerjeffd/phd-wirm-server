@@ -99,6 +99,12 @@ footer {
   padding: 5px 0;
 }
 
+.project-info-list {
+  list-style-type:none;
+  padding-left: 0;
+  margin-left: 0;
+}
+
 li.project-item {
   list-style-type:none;
   padding-left: 0;

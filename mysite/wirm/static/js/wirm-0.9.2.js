@@ -1,10 +1,10 @@
 /* ============================================ 
- * wirm.js v0.9.1 
+ * wirm.js v0.9.2 
  * http://walkerjeffd.github.com/wirm/ 
  * ============================================= 
  * Copyright 2013 Jeffrey D. Walker 
  * 
- * Build Date: 2013-06-21 
+ * Build Date: 2013-06-23 
  * ============================================= */ 
 // helper function for getting CSRF from cookie
 function getCookie(name) {
@@ -38,9 +38,7 @@ window.App = {
   Models: {},
   Collections: {},
   Views: {},
-  Router: {},
-  Charts: {},
-  Simulations: {}
+  Router: {}
 };
 
 // custom events object
@@ -51,6 +49,20 @@ App.template = function(id) {
   return _.template( $('#' + id).html() );
 };
 
+// add close method to Backbone.View
+Backbone.View.prototype.close = function(){
+  if (this.subViews) {
+    _.each(this.subViews, function(view, key) {
+      view.close();
+    });
+  }
+  if (this.onClose) {
+    this.onClose();
+  }
+  this.remove();
+  this.unbind();
+  this.stopListening();
+};
 App = window.App || {};
 
 App.SimulationEngine = function(parameters) {
@@ -377,12 +389,16 @@ App.Models.Parameter = Backbone.Model.extend({
   urlRoot: '/api/parameters/',
 
   saveRevert: function() {
+    // cache attributes
     this._revertAttributes = _.clone(this.attributes);
   },
 
   revert: function() {
+    // replace parameter attributes with cached attributes
     if (this._revertAttributes) {
       this.set(this._revertAttributes);
+    } else {
+      console.log('ERROR: Unable to revert parameter, cannot find cached values');
     }
   }
 });
@@ -413,10 +429,13 @@ App.Models.Project = Backbone.Model.extend({
   save: function(attributes, options) {
       // cleanup attributes before saving
       var that = this;
+
+      // prevent sending project comments to API
       var attrs = ['comments'];
       _.each(attrs, function(attr){
         that.unset(attr);
       });
+      
       Backbone.Model.prototype.save.call(this, attributes, options);
   }
 });
@@ -438,12 +457,12 @@ App.Collections.Parameters = Backbone.Collection.extend({
   url: '/api/parameters/',
 
   initialize: function(models, options) {
-    // console.log('INIT: parameters');
     App.vent.bind('reset:parameters', this.revert, this);
     App.vent.bind('save:parameters', this.saveRevert, this);
   },
 
   saveRevert: function() {
+    // cache attributes of all parameters
     console.log('parameters: saving parameter state');
     this.each(function(parameter) {
       parameter.saveRevert();
@@ -451,17 +470,18 @@ App.Collections.Parameters = Backbone.Collection.extend({
   },
 
   revert: function() {
+    // revert to cached attributes of all parameters
     console.log('parameters: reverting parameter state');
     this.each(function(parameter) {
       parameter.revert();
     });
   },
 
-  // helper function to convert parameter values to key->value pairs
   getKeyValuePairs: function() {
-      var keyValues = {};
-      this.each(function(d) { keyValues[d.get('key')] = d.get('value'); });
-      return keyValues;
+    // helper function to convert parameter values to key->value pairs
+    var keyValues = {};
+    this.each(function(d) { keyValues[d.get('key')] = d.get('value'); });
+    return keyValues;
   }
 });
 
@@ -470,6 +490,46 @@ App.Collections.Projects = Backbone.Collection.extend({
 
   url: '/api/projects/'
 });
+// chart view of simulation model output
+App.Views.Chart = Backbone.View.extend({
+  initialize: function(options) {
+    console.log('INIT: chart');
+    var view = this;
+
+    this.engine = options.engine;
+    this.parameters = options.parameters;
+
+    this.rendered = false;
+
+    this.chart = new App.Chart();
+
+    _.each(this.options.chartOptions, function(value, key) {
+      view.chart[key](value);
+    });
+
+    this.listenTo(this.parameters, 'change:value', this.update);
+  },
+
+  render: function() {
+    console.log('RENDER: chart');
+    this.chart(this.el);
+    this.rendered = true;
+    return this;
+  },
+
+  update: function() {
+    console.log('UPDATE: chart');
+    if (this.rendered) {
+      this.chart.data( this.engine( this.parameters.getKeyValuePairs() ) );
+    }
+    return this;
+  },
+
+  onClose: function() {
+    console.log('CLOSE: chart view');
+  }
+});
+
 App.Views.CommentTab = Backbone.View.extend({
   template: App.template('template-comment'),
 
@@ -589,24 +649,30 @@ App.Views.Controls = Backbone.View.extend({
     console.log('INIT: controls');
     this.project = options.project;
     this.parameters = options.parameters;
-    this.listenTo(this.project, 'change', this.render, this);
+
     App.vent.bind('status', this.showStatus, this);
   },
 
   render: function() {
     console.log('RENDER: controls');
     this.$el.html(this.template());
-    this.delegateEvents();
+
     if (this.project.isNew()) {
-      this.$('.btn-share').remove();
+      this.$('.btn-share').hide();
+      this.$('.btn-save').tooltip({placement: 'bottom', trigger: 'hover', container: 'body', title: 'Save to new project'});
       this.$('.btn-reset').tooltip({placement: 'bottom', trigger: 'hover', container: 'body', title: 'Reset parameters to default values'});
     } else {
+      this.$('.btn-share').tooltip({placement: 'bottom', trigger: 'hover', container: 'body', title: 'Share saved project with others'});
+      this.$('.btn-save').tooltip({placement: 'bottom', trigger: 'hover', container: 'body', title: 'Save project to server'});
       this.$('.btn-reset').tooltip({placement: 'bottom', trigger: 'hover', container: 'body', title: 'Reset parameters to last saved values'});
     }
+
     this.$('.alert').hide();
-    this.$('.btn-save').tooltip({placement: 'bottom', trigger: 'hover', container: 'body', title: 'Save to new project'});
-    this.$('.btn-share').tooltip({placement: 'bottom', trigger: 'hover', container: 'body', title: 'Share saved project with others'});
     return this;
+  },
+
+  onClose: function() {
+    console.log('CLOSE: controls');
   },
 
   saveProject: function() {
@@ -616,7 +682,7 @@ App.Views.Controls = Backbone.View.extend({
       // project is new
       if (App.router.isAuthenticated()) {
         // user is logged in
-        this.$('.btn-save').tooltip('hide');
+        // view.$('.btn-save').tooltip('hide');
         var projectModal = new App.Views.ProjectModal({project: this.project, parameters: this.parameters, parent: this});
       } else {
         // user is not logged in
@@ -628,8 +694,12 @@ App.Views.Controls = Backbone.View.extend({
         // current user owns project
         this.project.save({parameter_values: this.parameters.getKeyValuePairs()}, {
           success: function() {
-            console.log('success');
+            // view.$('.btn-save').tooltip('hide');
             App.vent.trigger('status', 'success', 'Success: Project saved');
+            App.vent.trigger('save:parameters');
+          },
+          error: function(model, response, options) {
+            App.vent.trigger('status', 'error', 'Error: unable to save project parameter values');
           }
         });
       } else {
@@ -656,6 +726,7 @@ App.Views.Controls = Backbone.View.extend({
   shareProject: function() {
     console.log('Sharing project ' + this.project.get('id'));
     var modal = new App.Views.ShareModal();
+    modal.render();
   }
 });
 
@@ -670,7 +741,6 @@ App.Views.ShareModal = Backbone.View.extend({
 
   initialize: function(options) {
     console.log('INIT: share modal');
-    this.render();
   },
 
   render: function() {
@@ -681,10 +751,9 @@ App.Views.ShareModal = Backbone.View.extend({
     return this;
   },
 
-  close: function() {
-    console.log('project modal: close');
+  onClose: function() {
+    console.log('CLOSE: share modal');
     this.$('.modal').modal('hide');
-    this.remove();
   }
 });
 
@@ -698,12 +767,17 @@ App.Views.Dashboard = Backbone.View.extend({
     this.project = this.options.project;
     this.comments = this.options.comments;
 
+    // this.$el.html( this.template() );
+
     // create sub-views
     this.subViews = {};
-    this.subViews.projectInfo = new App.Views.ProjectInfo({project: this.project, parameters: this.parameters});
+    if (!this.project.isNew()) {
+      this.subViews.projectInfo = new App.Views.ProjectInfo({project: this.project, parameters: this.parameters});
+    }
     this.subViews.controls = new App.Views.Controls({project: this.project, parameters: this.parameters});
-    this.subViews.simulationView = new App.Views.Simulation({
-      el: this.$('#chart-container'),
+    this.subViews.tabsView = new App.Views.Tabs({project: this.project, parameters: this.parameters, comments: this.comments});
+    this.subViews.chartView = new App.Views.Chart({
+      // el: this.$('#chart-container'),
       chartOptions: {
         width: 500,
         height: 400,
@@ -714,9 +788,8 @@ App.Views.Dashboard = Backbone.View.extend({
       parameters: this.parameters,
       engine: App.SimulationEngine
     });
-    this.subViews.tabsView = new App.Views.Tabs({project: this.project, parameters: this.parameters, comments: this.comments});
 
-    this.render();
+    // this.render();
   },
 
   render: function() {
@@ -725,56 +798,20 @@ App.Views.Dashboard = Backbone.View.extend({
     // initialize element
     this.$el.html( this.template() );
 
-    this.subViews.projectInfo.setElement(this.$('#project-info')).render();
-    this.subViews.controls.setElement(this.$('#controls')).render();
-    this.subViews.simulationView.setElement(this.$('#chart-container')).render().update();
-    this.subViews.tabsView.setElement(this.$('#tabs-container')).render();
-
-    return this;
-  }
-});
-
-App.Views.Tabs = Backbone.View.extend({
-  template: App.template('template-tabs'),
-
-  initialize: function(options) {
-    console.log('INIT: tabs');
-    this.parameters = options.parameters;
-    this.project = options.project;
-    this.comments = options.comments;
-
-    this.subViews = {};
-    // this.subViews.basicTab = new App.Views.ParametersTab({parameters: this.parameters});
-    this.subViews.basicTab = new App.Views.ParametersTab({parameters: this.parameters, group: 'basic'});
-    this.subViews.advancedTab = new App.Views.ParametersTab({parameters: this.parameters, group: 'advanced'});
-
-    this.subViews.commentTab = new App.Views.CommentTab({collection: this.comments});
-
-    // this.listenTo(this.project, 'change:comments', this.updateComments);
-    // this.listenTo(this.project, 'sync', this.updateComments);
-  },
-
-  updateComments: function() {
-    console.log('Updating comments');
-    // this.comments.reset(this.project.get('comments'));
-    // this.comments.fetch();
-  },
-
-  render: function() {
-    console.log('RENDER: tabs');
-    this.$el.html( this.template() );
-
-    this.subViews.basicTab.setElement(this.$('#tab-param-basic')).render();
-    this.subViews.advancedTab.setElement(this.$('#tab-param-advanced')).render();
-
-    // if project is not new, add comments tab
-    if (!this.project.isNew()) {
-      this.$('ul.nav').append('<li><a href="#tab-comments" data-toggle="tab">Comments</a></li>');
-      this.$('.tab-content').append('<div class="tab-pane fade" id="tab-comments"></div>');
-      this.subViews.commentTab.setElement(this.$('#tab-comments')).render();
+    if (this.project.isNew()) {
+      this.$('#project-info').html("<h1>New Project</h1>");
+    } else {
+      this.$('#project-info').html(this.subViews.projectInfo.render().el);
     }
-    
+    this.$('#controls').html(this.subViews.controls.render().el);
+    this.$('#chart-container').html(this.subViews.chartView.render().update().el);
+    this.$('#tabs-container').html(this.subViews.tabsView.render().el);
+
     return this;
+  },
+
+  onClose: function() {
+    console.log('CLOSE: dashboard');
   }
 });
 
@@ -797,19 +834,27 @@ App.Views.ParametersTab = Backbone.View.extend({
     var view = this;
     this.parameters = options.parameters;
     this.group = options.group;
-    this.listenToOnce(this.parameters, 'sync', this.render);
   },
 
   render: function() {
     console.log('RENDER: parameters view');
     var view = this;
+
     this.$el.empty();
-    var basicParameters = this.parameters.filter(function (model) { return model.get('group')===view.group;});
-    _.each(basicParameters, function(parameter) {
-        var parameterContainer = new App.Views.ParameterContainer({model: parameter});
-        view.$el.append(parameterContainer.el);
-      });
+
+    var thisParameters = this.parameters.filter(function (model) { 
+      return model.get('group')===view.group;
+    });
+    _.each(thisParameters, function(parameter) {
+      var parameterContainer = new App.Views.ParameterContainer({model: parameter});
+      view.$el.append(parameterContainer.el);
+    });
+
     return this;
+  },
+
+  onClose: function() {
+    console.log('CLOSE: parameters tab - ' + this.group);
   }
 });
 
@@ -871,37 +916,34 @@ App.Views.ParameterSlider = Backbone.View.extend({
   }
 });
 
-// project info in dashboard header
 App.Views.ProjectInfo = Backbone.View.extend({
   template: App.template('template-project-info'),
 
   events: {
     "click .btn-edit": "editProject",
-    "click .btn-delete": "deleteProject"
+    "click .btn-delete": "deleteProject",
+    "click .alert .btn-confirm": "deleteProjectConfirm",
+    "click .alert .btn-cancel": "deleteProjectCancel"
   },
 
   initialize: function(options) {
     console.log('INIT: project info');
     this.project = options.project;
     this.parameters = options.parameters;
-    this.listenTo(this.project, 'change', this.render, this);
+
+    this.listenTo(this.project, 'sync', this.render, this);
     this.listenTo(this.project, 'destroy', function() { App.router.navigate('/', {trigger: true}); });
   },
 
   render: function() {
-    var view = this;
     console.log('RENDER: project info');
     this.$el.html( this.template( this.project.toJSON() ) );
-    this.$('#project-details').toggle(!(this.project.isNew()));
     this.$('.alert').hide();
-    this.$('.alert .btn-confirm').on('click', function() {
-      view.project.destroy();
-    });
-    this.$('.alert .btn-cancel').on('click', function() {
-      view.$('.alert').toggle();
-    });
-    
     return this;
+  },
+
+  onClose: function() {
+    console.log('CLOSE: project info');
   },
 
   editProject: function() {
@@ -913,6 +955,14 @@ App.Views.ProjectInfo = Backbone.View.extend({
       // current user does not own project
       App.vent.trigger('status', 'error', 'Error: Only the owner of this project can edit it');
     }
+  },
+
+  deleteProjectConfirm: function() {
+    this.project.destroy();
+  },
+
+  deleteProjectCancel: function() {
+    this.$('.alert').toggle();
   },
 
   deleteProject: function() {
@@ -929,17 +979,18 @@ App.Views.ProjectInfo = Backbone.View.extend({
 });
 
 // project list
-App.Views.ProjectContainer = Backbone.View.extend({
+App.Views.ProjectListContainer = Backbone.View.extend({
   template: App.template('template-project-container'),
 
   initialize: function() {
-    console.log('INIT: project list view');
+    console.log('INIT: project list container');
     this.subViews = {};
     this.subViews.projectList = new App.Views.ProjectList({collection: this.collection});
-    this.listenTo(this.collection, 'sync add remove change', this.render);
+    // this.listenTo(this.collection, 'sync add remove change', this.render);
   },
 
   render: function() {
+    console.log('RENDER: project list container');
     this.$el.html( this.template() );
     if (!(App.router.isAuthenticated())) {
       this.$el.append('<p>You must be logged in to view saved projects. Click here to <a href="/accounts/login/">log in</a> or <a href="/accounts/register/">sign up</a>.</p>');
@@ -948,6 +999,10 @@ App.Views.ProjectContainer = Backbone.View.extend({
     } else {
       this.$el.append(this.subViews.projectList.render().el);
     }
+  },
+
+  onClose: function() {
+    console.log('CLOSE: project list container');
   }
 });
 
@@ -956,15 +1011,28 @@ App.Views.ProjectList = Backbone.View.extend({
 
   className: 'project-list',
 
+  initialize: function() {
+    console.log('INIT: project list');
+    this.subViews = [];
+  },
+
   render: function() {
-    console.log('RENDER: project list view');
+    console.log('RENDER: project list');
     var view = this;
+
     this.$el.empty();
+
     this.collection.each(function(project) {
       var projectItem = new App.Views.ProjectListItem({model: project});
+      view.subViews.push(projectItem);
       view.$el.append(projectItem.render().el );
     });
+
     return this;
+  },
+
+  onClose: function() {
+    console.log('CLOSE: project list');
   }
 });
 
@@ -982,18 +1050,25 @@ App.Views.ProjectListItem = Backbone.View.extend({
     'click .btn-delete': 'deleteProject'
   },
 
+  initialize: function() {
+    console.log('INIT: project list item for id ' + this.model.get('id'));
+  },
+
   render: function() {
     console.log('RENDER: project list item');
     var context = this.model.toJSON();
     var view = this;
+
     context.created = moment(context.created).format('MMM D YYYY h:mm a');
     context.updated = moment(context.updated).format('MMM D YYYY h:mm a');
     context.createdFromNow = moment(context.created).fromNow();
     context.updatedFromNow = moment(context.updated).fromNow();
     this.$el.html( this.template( context ) );
+    
     this.$('.alert').hide();
     this.$('.alert .btn-confirm').on('click', function() {
       view.model.destroy();
+      view.close();
     });
     this.$('.alert .btn-cancel').on('click', function() {
       view.$('.alert').toggle();
@@ -1003,6 +1078,10 @@ App.Views.ProjectListItem = Backbone.View.extend({
 
   deleteProject: function() {
     this.$('.alert').slideDown();
+  },
+
+  onClose: function() {
+    console.log('CLOSE: project list item for id ' + this.model.get('id'));
   }
 });
 
@@ -1021,10 +1100,13 @@ App.Views.ProjectModal = Backbone.View.extend({
     this.project = options.project;
     this.parameters = options.parameters;
     this.title = options.title || 'Create Project';
+
     this.project.set('parameter_values', this.parameters.getKeyValuePairs());
+
     this.listenTo(this.project, 'sync', this.postSave, this);
     this.listenTo(this.project, 'error', this.showError);
     this.listenTo(this.project, 'invalid', this.showInvalid);
+
     this.render();
   },
 
@@ -1050,28 +1132,25 @@ App.Views.ProjectModal = Backbone.View.extend({
   },
 
   postSave: function() {
-    console.log('project model: project saved');
+    console.log('SUCCESS: project saved');
     App.vent.trigger('status', 'success', 'Project saved');
     this.close();
     App.router.navigate('/projects/' + this.project.get('id'), {trigger: true});
   },
 
-  close: function() {
-    console.log('project modal: close');
+  onClose: function() {
+    console.log('CLOSE: project modal');
     this.$('.modal').modal('hide');
-    this.remove();
   },
 
   showError: function(model, xhr, options) {
-    console.log('Error saving model:');
+    console.log('ERROR: unable to save project');
     this.showStatus('Error: Unable to save model.');
-    // App.vent.trigger('status', 'error', 'Error saving model');
     console.log(xhr);
   },
 
   showInvalid: function(model, error, options) {
     this.showStatus('Error: ' + error);
-    // App.vent.trigger('status', 'error', 'Model Validation Failed');
     console.log('Invalid model: ' + error);
   },
 
@@ -1082,35 +1161,42 @@ App.Views.ProjectModal = Backbone.View.extend({
   }
 });
 
-App.Views.Simulation = Backbone.View.extend({
+App.Views.Tabs = Backbone.View.extend({
+  template: App.template('template-tabs'),
+
   initialize: function(options) {
-    console.log('INIT: simulation');
-    var view = this;
-
-    this.engine = options.engine;
+    console.log('INIT: tabs');
     this.parameters = options.parameters;
+    this.project = options.project;
+    this.comments = options.comments;
 
-    this.listenToOnce(this.parameters, 'sync', this.update);
-    this.listenTo(this.parameters, 'change:value', this.update);
-
-    this.chart = new App.Chart();
-
-    _.each(this.options.chartOptions, function(value, key) {
-      view.chart[key](value);
-    });
+    this.subViews = {};
+    this.subViews.basicTab = new App.Views.ParametersTab({parameters: this.parameters, group: 'basic'});
+    this.subViews.advancedTab = new App.Views.ParametersTab({parameters: this.parameters, group: 'advanced'});
+    if (this.comments) {
+      this.subViews.commentTab = new App.Views.CommentTab({collection: this.comments});
+    }
   },
 
   render: function() {
-    console.log('RENDER: simulation');
-    this.chart(this.el);
+    console.log('RENDER: tabs');
+
+    this.$el.html( this.template() );
+
+    this.$('#tab-param-basic').html(this.subViews.basicTab.render().el);
+    this.$('#tab-param-advanced').html(this.subViews.advancedTab.render().el);
+
+    // if (this.comments) {
+    //   this.$('ul.nav').append('<li><a href="#tab-comments" data-toggle="tab">Comments</a></li>');
+    //   this.$('.tab-content').append('<div class="tab-pane fade" id="tab-comments"></div>');
+    //   this.subViews.commentTab.setElement(this.$('#tab-comments')).render();
+    // }
+
     return this;
   },
 
-  update: function() {
-    if (this.parameters.length > 0) {
-      this.chart.data( this.engine( this.parameters.getKeyValuePairs() ) );
-    }
-    return this;
+  onClose: function() {
+    console.log('CLOSE: tabs');
   }
 });
 
@@ -1125,84 +1211,135 @@ App.Router.Workspace = Backbone.Router.extend({
   initialize: function(options) {
     this.el = options.el;
 
-    // set up models/collections
-    this.project = new App.Models.Project();
-    this.projects = new App.Collections.Projects();
-    this.parameters = new App.Collections.Parameters();
-    this.comments = new App.Collections.Comments([], {project: this.project});
+    // // set up models/collections
+    // this.project = new App.Models.Project();
+    // this.projects = new App.Collections.Projects();
+    // this.parameters = new App.Collections.Parameters();
+    // this.comments = new App.Collections.Comments([], {project: this.project});
 
-    // set up dashboard view
-    this.dashboard = new App.Views.Dashboard({parameters: this.parameters, project: this.project, comments: this.comments});
+    // // initialize dashboard view
+    // this.dashboard = new App.Views.Dashboard({parameters: this.parameters,
+    //                                           project: this.project,
+    //                                           comments: this.comments});
 
-    // set up project list view
-    this.projectContainer = new App.Views.ProjectContainer({collection: this.projects});
+    // // initialize project list view
+    // this.projectListContainer = new App.Views.ProjectListContainer({collection: this.projects});
 
-    // fetch default parameters
-    this.parameters.fetch();
+    // // fetch default parameters
+    // this.parameters.fetch();
 
-    // update values in parameters collection when project is fetched
-    this.listenTo(this.parameters, 'sync', function() {App.vent.trigger('save:parameters');});
-    this.listenTo(this.project, 'sync', this.updateParameters);
+    // // update values in parameters collection when project is fetched
+    // this.listenTo(this.parameters, 'sync', function() { App.vent.trigger('save:parameters'); });
+    // this.listenTo(this.project, 'sync', this.postProjectSync);
 
-    // show all events for debugging
+    // // show all events for debugging
     // this.listenTo(this.project, 'all', function(eventName) {console.log('EVENT - project : ' + eventName);});
     // this.listenTo(this.projects, 'all', function(eventName) {console.log('EVENT - projects : ' + eventName);});
     // this.listenTo(this.parameters, 'all', function(eventName) {console.log('EVENT - parameters : ' + eventName);});
   },
 
-  unknownPath: function(path) {
-    this.showError('Unknown Path', 'The URL path #' + path + ' in invalid.');
+  showView: function(view) {
+    if (this.currentView) {
+      this.currentView.close();
+    }
+
+    this.currentView = view;
+    this.currentView.render();
+
+    $(this.el).html(this.currentView.el);
   },
 
   newProject: function() {
     console.log('ROUTE: new project');
+    var router = this;
 
-    // reset project to new project
-    if (!(this.project.isNew())) {
-      console.log('workspace: resetting project to new project');
-      this.project.clear({silent: true});
-      var newProject = new App.Models.Project();
-      this.project.set(newProject.toJSON());
-    }
+    // set up models/collections
+    var project = new App.Models.Project();
+    var parameters = new App.Collections.Parameters();
 
-    this.parameters.fetch();
+    // initialize dashboard view
+    var dashboard = new App.Views.Dashboard({parameters: parameters,
+                                             project: project});
 
-    // show dashboard
-    this.showDashboard();
-  },
-
-  showDashboard: function() {
-    console.log('workspace: show dashboard');
-    this.dashboard.setElement(this.el).render();
+    parameters.fetch({
+      success: function(collection, response, options) {
+        collection.saveRevert();
+        router.showView(dashboard);
+      },
+      error: function(collection, response, options) {
+        router.showError('Error Fetching Default Parameters', 'Server responded with status ' + response.status + ': ' + response.statusText + '.');
+      }
+    });
   },
 
   projectList: function() {
+    // show list of saved projects for current user
     console.log('ROUTE: project list');
-    this.projectContainer.setElement(this.el).render();
-    this.projects.fetch();
+    var router = this;
+
+    projects = new App.Collections.Projects();
+    
+    // initialize project list view
+    projectListView = new App.Views.ProjectListContainer({collection: projects});
+
+    projects.fetch({
+      success: function(collection, response, options) {
+        router.showView(projectListView);
+      },
+      error: function(collection, response, options) {
+        router.showError('Error Fetching Project List', 'Server responded with status ' + response.status + ': ' + response.statusText + '.');
+      }
+    });
   },
 
   loadProject: function(id) {
     console.log('ROUTE: load project');
-    var that = this;
+    var router = this;
 
-    this.project.set({id: id});
+    var project = new App.Models.Project({id: id});
+    var parameters = new App.Collections.Parameters();
+    var comments = new App.Collections.Comments([], {project: this.project});
 
-    this.project.fetch({
-      success: function(model, response, options) {
-        that.comments.fetch();
-        that.updateParameters();
-        that.showDashboard();
+    // initialize dashboard view
+    var dashboard = new App.Views.Dashboard({parameters: parameters,
+                                             project: project,
+                                             comments: comments});
+
+    parameters.fetch({
+      success: function(collection, response, options) {
+        project.fetch({
+          success: function(model, response, options) {
+            var projectParameters = project.get('parameter_values');
+            parameters.each(function(parameter) {
+              parameter.set('value', projectParameters[parameter.get('key')]);
+            });
+            App.vent.trigger('save:parameters');
+
+            router.showView(dashboard);
+          },
+          error: function(model, response, options) {
+            console.log('ERROR: fetching project ' + id);
+            if (response.status === 404) {
+              router.showError('Project Not Found', 'The project with id ' + id + ' was not found by the server.');
+            } else {
+              router.showError('Error Fetching Project', 'Server responded with status ' + response.status + ': ' + response.statusText + '.');
+            }
+          }
+        });
       },
-      error: function(model, response, options) {
-        console.log('Error fetching project ' + id);
-        if (response.status === 404) {
-          that.showError('Project not found', 'The project with id ' + id + ' was not found.');
-        } else {
-          that.showError('Unknown Error', 'Server responded with status ' + response.status + ': ' + response.statusText + '.');
-        }
+      error: function(collection, response, options) {
+        console.log('ERROR: fetching parameters');
+        router.showError('Error Fetching Default Parameters', 'Server responded with status ' + response.status + ': ' + response.statusText + '.');
       }
     });
+  },
+
+  postProjectSync: function() {
+    // update parameters collection with parameter values from project
+    console.log('workspace: updating parameters');
+
+    // fetch project comments
+    this.comments.fetch();
   },
 
   showError: function(title, message) {
@@ -1210,13 +1347,8 @@ App.Router.Workspace = Backbone.Router.extend({
     errorView.setElement(this.el).render();
   },
 
-  updateParameters: function() {
-    console.log('workspace: updating parameters');
-    var newParameters = this.project.get('parameter_values');
-    this.parameters.each(function(parameter) {
-      parameter.set('value', newParameters[parameter.get('key')]);
-    });
-    App.vent.trigger('save:parameters');
+  unknownPath: function(path) {
+    this.showError('Unknown Path', 'The URL path #' + path + ' in invalid.');
   },
 
   isAuthenticated: function() {
@@ -1225,6 +1357,7 @@ App.Router.Workspace = Backbone.Router.extend({
 });
 
 App.boot = function(container) {
+  // initialize application
   container = $(container);
   App.router = new App.Router.Workspace({el: container});
   Backbone.history.start({root: "/client/"});
