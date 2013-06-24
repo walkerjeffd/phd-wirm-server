@@ -1,10 +1,10 @@
 /* ============================================ 
- * wirm.js v0.9.2 
+ * wirm.js v0.9.3 
  * http://walkerjeffd.github.com/wirm/ 
  * ============================================= 
  * Copyright 2013 Jeffrey D. Walker 
  * 
- * Build Date: 2013-06-23 
+ * Build Date: 2013-06-24 
  * ============================================= */ 
 // helper function for getting CSRF from cookie
 function getCookie(name) {
@@ -531,31 +531,25 @@ App.Views.Chart = Backbone.View.extend({
 });
 
 App.Views.CommentTab = Backbone.View.extend({
-  template: App.template('template-comment'),
+  template: App.template('template-comment-tab'),
 
   events: {
     'click #submit-comment': 'submitComment'
   },
 
-  initialize: function() {
+  initialize: function(options) {
     console.log('INIT: comment tab');
-    this.listenTo(this.collection, 'sync', this.render, this);
-    this.listenTo(this.collection, 'change', this.render, this);
-    this.listenTo(this.collection, 'remove', this.render, this);
-    this.listenTo(this.collection, 'add', this.render, this);
-    this.listenTo(this.collection, 'reset', this.render, this);
+    this.project = options.project;
+
+    this.subViews = {};
+    this.subViews.commentList = new App.Views.CommentList({collection: this.collection});
   },
 
   render: function() {
     console.log('RENDER: comment tab');
     var view = this;
     view.$el.html(this.template());
-    if (this.collection.isEmpty()) {
-      this.$('.comment-list-container').html('<p>No comments</p>');
-    } else {
-      var commentList = new App.Views.CommentList({collection: this.collection});
-      this.$('.comment-list-container').html( commentList.render().el );
-    }
+    this.$('.comment-list-container').html( this.subViews.commentList.el );
     return this;
   },
 
@@ -565,6 +559,7 @@ App.Views.CommentTab = Backbone.View.extend({
     this.collection.create({'comment': comment},
       { wait: true,
         success:function() {
+          App.vent.trigger('status', 'success', 'Comment saved');
           this.$("input[name='comment']").val('');
           console.log('added comment');
         },
@@ -574,6 +569,10 @@ App.Views.CommentTab = Backbone.View.extend({
           console.log(xhr);
       }
     });
+  },
+
+  onClose: function() {
+    console.log('CLOSE: comment tab');
   }
 });
 
@@ -584,21 +583,44 @@ App.Views.CommentList = Backbone.View.extend({
 
   initialize: function() {
     console.log('INIT: comment list');
+
+    this.subViews = [];
+
+    // this.listenToOnce(this.collection, 'reset', this.render, this);
+    // this.listenTo(this.collection, 'change', this.render, this);
+    // this.listenTo(this.collection, 'remove', this.render, this);
+    this.listenTo(this.collection, 'add', this.addOne, this);
+    // this.listenTo(this.collection, 'reset', this.render, this);
   },
 
   render: function() {
     console.log('RENDER: comment list');
     var view = this;
-    view.$el.empty();
+    // view.$el.empty();
     if (this.collection.isEmpty()) {
-      this.$el.html('No comments');
+      this.$el.html('No comments.');
     } else {
-      this.collection.each(function(comment) {
-        var commentListItem = new App.Views.CommentListItem({model: comment});
-        view.$el.append( commentListItem.render().el );
-      });
+      this.addAll();
     }
     return this;
+  },
+
+  addOne: function(comment) {
+    var commentListItem = new App.Views.CommentListItem({model: comment});
+    this.subViews.push(commentListItem);
+    this.$el.append( commentListItem.render().el );
+  },
+
+  addAll: function() {
+    var view = this;
+    this.$el.html('');
+    this.collection.each( function(comment) {
+      view.addOne(comment);
+    });
+  },
+
+  onClose: function() {
+    console.log('CLOSE: comment list');
   }
 });
 
@@ -617,8 +639,8 @@ App.Views.CommentListItem = Backbone.View.extend({
   },
 
   render: function() {
+    console.log('RENDER: comment list item for id ' + this.model.get('id'));
     var context = this.model.toJSON();
-    // context.formatCreated = moment(context.created).format("MMM D YYYY, h:mm a");
     context.formatCreated = moment(context.created).fromNow();
     this.$el.html( this.template( context ) );
     return this;
@@ -634,6 +656,11 @@ App.Views.CommentListItem = Backbone.View.extend({
         App.vent.trigger('status', 'error', 'Unable to delete comment');
       }
     });
+    this.close();
+  },
+
+  onClose: function() {
+    console.log('CLOSE: comment list item for id ' + this.model.get('id'));
   }
 });
 App.Views.Controls = Backbone.View.extend({
@@ -1173,8 +1200,8 @@ App.Views.Tabs = Backbone.View.extend({
     this.subViews = {};
     this.subViews.basicTab = new App.Views.ParametersTab({parameters: this.parameters, group: 'basic'});
     this.subViews.advancedTab = new App.Views.ParametersTab({parameters: this.parameters, group: 'advanced'});
-    if (this.comments) {
-      this.subViews.commentTab = new App.Views.CommentTab({collection: this.comments});
+    if (!this.project.isNew()) {
+      this.subViews.commentTab = new App.Views.CommentTab({collection: this.comments, project: this.project});
     }
   },
 
@@ -1186,11 +1213,12 @@ App.Views.Tabs = Backbone.View.extend({
     this.$('#tab-param-basic').html(this.subViews.basicTab.render().el);
     this.$('#tab-param-advanced').html(this.subViews.advancedTab.render().el);
 
-    // if (this.comments) {
-    //   this.$('ul.nav').append('<li><a href="#tab-comments" data-toggle="tab">Comments</a></li>');
-    //   this.$('.tab-content').append('<div class="tab-pane fade" id="tab-comments"></div>');
-    //   this.subViews.commentTab.setElement(this.$('#tab-comments')).render();
-    // }
+    if (this.project.isNew()) {
+      this.$('ul.nav-tabs > li:last').remove();
+      this.$('#tab-comments').remove();
+    } else {
+      this.$('#tab-comments').html(this.subViews.commentTab.render().el);
+    }
 
     return this;
   },
@@ -1298,7 +1326,7 @@ App.Router.Workspace = Backbone.Router.extend({
 
     var project = new App.Models.Project({id: id});
     var parameters = new App.Collections.Parameters();
-    var comments = new App.Collections.Comments([], {project: this.project});
+    var comments = new App.Collections.Comments([], {project: project});
 
     // initialize dashboard view
     var dashboard = new App.Views.Dashboard({parameters: parameters,
@@ -1314,7 +1342,7 @@ App.Router.Workspace = Backbone.Router.extend({
               parameter.set('value', projectParameters[parameter.get('key')]);
             });
             App.vent.trigger('save:parameters');
-
+            comments.fetch();
             router.showView(dashboard);
           },
           error: function(model, response, options) {

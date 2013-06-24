@@ -92,7 +92,7 @@
 </div>
 </script>
 
-<script type="text/template" id="template-comment">
+<script type="text/template" id="template-comment-tab">
 <form class="form-inline">
   <input name="comment" type="text" id="id_comment" placeholder="Enter your comment...">
   <button id="submit-comment" class="btn btn-primary">Submit</button>
@@ -143,10 +143,14 @@
   <li>
     <a href="#tab-param-advanced" data-toggle="tab">Advanced</a>
   </li>
+  <li>
+    <a href="#tab-comments" data-toggle="tab">Comments</a>
+  </li>
 </ul>
 <div class="tab-content">
   <div class="tab-pane fade active in" id="tab-param-basic"></div>
   <div class="tab-pane fade in" id="tab-param-advanced"></div>
+  <div class="tab-pane fade in" id="tab-comments"></div>
 </div>
 </script>
 
@@ -169,7 +173,7 @@
   <script src="{% static "js/lib/d3-3.0.8.js" %}"></script>
   <script src="{% static "js/lib/numeric-1.2.6.js" %}"></script>
   <script src="{% static "js/lib/moment-2.0.0.js" %}"></script>
-  <script src="{% static "js/wirm-0.9.2.js" %}"></script>
+  <script src="{% static "js/wirm-0.9.3.js" %}"></script>
     
 
   <script>
