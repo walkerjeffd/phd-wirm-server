@@ -23,6 +23,14 @@ footer {
   margin-bottom: 20px;
 }
 
+.row-doc > .span3 > h3:before { 
+  display: block; 
+  content: " "; 
+  margin-top: -60px; 
+  height: 60px; 
+  visibility: hidden;
+}
+
 .row-doc > .span9 > h4:before { 
   display: block; 
   content: " "; 

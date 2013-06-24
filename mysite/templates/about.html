@@ -5,28 +5,28 @@
 {% block content %}
 <h1>About WIRM</h1>
 
-<p>This website is part of an on-going research project at Tufts University investigating advanced web-based approaches to environmental modeling and decision support. It is intended primarily as a demonstration of the use of modern web technologies to improve model acessibility, understanding and collaboration. This research is being conducted by Jeff Walker, PhD Candidate, and Dr. Steve Chapra, Professor.</p>
+<p>The Web-based Interactive River Model (WIRM) is part of an on-going research project investigating advanced web-based approaches to environmental modeling and decision support. It is intended primarily as a demonstration of the use of modern web technologies to create a highly interactive, web-based interface for a water quality simulation model. This research is being conducted by <a href="mailto:jeffrey.walker@tufts.edu">Jeff Walker</a>, PhD Candidate, and <a href="mailto:steven.chapra@tufts.edu">Dr. Steve Chapra</a>, Professor in the <a href="http://engineering.tufts.edu/cee/">Dept. of Civil and Environmental Engineering</a> at <a href="http://www.tufts.edu">Tufts University</a>.</p>
 <hr>
 <div class="row row-doc">
   <div class="span3">
-    <h3>Overview</h3>
+    <h3>Purpose</h3>
   </div>
   <div class="span9">
-    <p>Website are comprised of two components: the server and the client. Web servers are used to store data, deliver content (such as html documents and images), and handle user authentication. The majority of existing research into web-based modeling and decision support utilize the server as a computational engine for computing model solutions. However, for sufficiently simple models, we have demonstrated that moving the numerical computations from the server to the client reduces server load while improving user interactivity. Unfortunately, there is really only one language that can be used to code client-side: JavaScript. While it has long been thought to be an inferior, slow language, recent advances in JavaScript engines (such as Google's V8) have made it incredibly fast for certain tasks. Some report that JavaScript can run at the same speed as compiled C++.</p>
+    <p>Simulation models are widely used to support environmental management and decision making. However, most models require strong technical and programming skills due to antiquated or poorly designed user interfaces. This leaves decision makers and stakeholders reliant on modeling experts to develop, run and analyze models on their behalf.</p>
+    <p>The World Wide Web has evolved into a revolutionary software platform for creating interactive, easy-to-use, and widely accessible applications. For many years, environmental modelers have been interested in developing web-based models and decision support systems that would improve model accessibility and understanding by decision makers and stakeholders. Performance gains in JavaScript engines (e.g. <a href="https://code.google.com/p/v8/">Chrome's V8</a>) as well as a diverse ecosystem of open-source JavaScript libraries (e.g. <a href="http://jquery.com">jQuery</a>, <a href="http://backbonejs.org">Backbone</a>, <a href="http://d3js.org">d3</a> to name a few) are capable of supporting client-based web applications for environmental simulation. WIRM demonstrates the use of these technologies to create a highly interactive, easy-to-use, and widely accessible application for water quality simulation.</p>
   </div>
 </div>
 <hr>
 <div class="row row-doc">
   <div class="span3">
-    <h3>Server-side Architecture</h3>
+    <h3>Server Architecture</h3>
   </div>
   <div class="span9">
-    <p>The server-side architecture was built using the <a href="https://www.djangoproject.com/">Django</a> web framework, which is " a high-level Python Web framework that encourages rapid development and clean, pragmatic design." Django is a popular and mature framework that has been under active development for over many years.</p>
+    <p>The WIRM server was built using the <a href="https://www.djangoproject.com/">Django</a> web framework, which is "a high-level Python Web framework that encourages rapid development and clean, pragmatic design." Django is a popular and mature framework that has been under active development for over many years.</p>
     <p>In addition, this site utilizes a number of Django plug-ins including:
     <ul>
-      <li>Django Rest Framework for delivering a REST(ish) API to the model parameters and projects</li>
-      <li>Registration for user account registration</li>
-      <li>South for database management and schema migrations</li>
+      <li><a href="http://django-rest-framework.org/">Django Rest Framework</a>: for delivering a REST-based <a href="/api/">API</a> for accessing model parameters, projects, users and comments (<a href="https://github.com/tomchristie/django-rest-framework">License</a>)</li>
+      <li><a href="https://bitbucket.org/ubernostrum/django-registration/">Registration</a>: user account registration and email-based activation (<a href="https://bitbucket.org/ubernostrum/django-registration/src/8f242e35ef7c004e035e54b4bb093c32bf77c29f/LICENSE?at=default">License</a>)</li>
     </ul>
     </p>
   </div>
@@ -34,21 +34,22 @@
 <hr>
 <div class="row row-doc">
   <div class="span3">
-    <h3>Client-side Architecture</h3>
+    <h3>Client Architecture</h3>
   </div>
   <div class="span9">
-    <p>The client-side web application that provides the user interface housed within the web browser is based on multiple JavaScript libraries including:
+    <p>The client-side web application controls the user interface, simulation engine and visualization renderer, all of which are executed within the web browser. It is built using a number of free and open-source software libaries including:
     <ul>
-      <li>JQuery for DOM manipulation</li>
-      <li>JQuery-ui plugin for providing slider widgets</li>
-      <li>Backbone.js for controlling the application flow and binding variables and data to elements on the page</li>
-      <li>Twitter Bootstrap for responsive layout and design that is cross-browser compatible</li>
-      <li>Numeric.js for providing vectorized array operations</li>
-      <li>D3.js for data visualization</li>
-      <li>Underscore.js for supporting Backbone and providing a JavaScript toolbox</li>
-      <li>MathJax.js for rendering equations using Latex-style code</li>
+      <li><a href="http://jquery.com">jQuery</a>: DOM manipulation, AJAX communication (<a href="https://github.com/jquery/jquery/blob/master/MIT-LICENSE.txt">License</a>)</li>
+      <li><a href="http://jqueryui.com/">jQuery-ui</a>: slider widgets (<a href="https://github.com/jquery/jquery-ui/blob/master/MIT-LICENSE.txt">License</a>)</li>
+      <li><a href="http://backbonejs.org">Backbone.js</a>: MVC application framework (<a href="https://github.com/documentcloud/backbone/blob/master/LICENSE">License</a>)</li>
+      <li><a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a>: front-end framework (<a href="https://github.com/twitter/bootstrap/blob/master/LICENSE">License</a>)</li>
+      <li><a href="http://www.numericjs.com/">Numeric.js</a>: element-wise array operations (<a href="https://github.com/sloisel/numeric/blob/master/license.txt">License</a>)</li>
+      <li><a href="http://d3js.org">d3.js</a>: data visualization (<a href="https://github.com/mbostock/d3/blob/master/LICENSE">License</a>)</li>
+      <li><a href="http://underscore.org">Underscore.js</a>: miscellaneous JavaScript utilities (<a href="https://github.com/documentcloud/underscore/blob/master/LICENSE">License</a>)</li>
+      <li><a href="http://www.mathjax.org/">MathJax.js</a>: equation rendering using Latex-style code (<a href="https://github.com/mathjax/MathJax/blob/master/LICENSE">License</a>)</li>
+      <li><a href="http://momentjs.com/">Moment.js</a>: date/time formatting (<a href="https://github.com/timrwood/moment/blob/develop/LICENSE">License</a>)</li>
     </ul>
-    </p>    
+    </p>
   </div>
 </div>
 <hr>
