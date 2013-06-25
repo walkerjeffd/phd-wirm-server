@@ -4,7 +4,7 @@
  * ============================================= 
  * Copyright 2013 Jeffrey D. Walker 
  * 
- * Build Date: 2013-06-24 
+ * Build Date: 2013-06-25 
  * ============================================= */ 
 // helper function for getting CSRF from cookie
 function getCookie(name) {
@@ -855,6 +855,19 @@ App.Views.Error = Backbone.View.extend({
     return this;
   }
 });
+App.Views.Loading = Backbone.View.extend({
+  template: App.template('template-loading'),
+
+  render: function() {
+    console.log('RENDER: loading');
+    this.$el.html( this.template() );
+    return this;
+  },
+
+  onClose: function() {
+    console.log('CLOSE: loading');
+  }
+});
 App.Views.ParametersTab = Backbone.View.extend({
   initialize: function(options) {
     console.log('INIT: parameters view');
@@ -1233,11 +1246,15 @@ App.Router.Workspace = Backbone.Router.extend({
     "": "newProject",
     "projects": "projectList",
     "projects/:id": "loadProject",
+    "load": "loading",
     "*path": "unknownPath"
   },
 
   initialize: function(options) {
+    console.log('INIT: router');
     this.el = options.el;
+
+    this.onFirstView = true;
 
     // // set up models/collections
     // this.project = new App.Models.Project();
@@ -1266,6 +1283,12 @@ App.Router.Workspace = Backbone.Router.extend({
     // this.listenTo(this.parameters, 'all', function(eventName) {console.log('EVENT - parameters : ' + eventName);});
   },
 
+  loading: function() {
+    console.log("ROUTE: loading");
+    var loadingView = new App.Views.Loading();
+    this.showView(loadingView);
+  },
+
   showView: function(view) {
     if (this.currentView) {
       this.currentView.close();
@@ -1277,9 +1300,20 @@ App.Router.Workspace = Backbone.Router.extend({
     $(this.el).html(this.currentView.el);
   },
 
+  showLoading: function() {
+    if (!this.onFirstView) {
+      var loadingView = new App.Views.Loading();
+      this.showView(loadingView);  
+    }
+
+    this.onFirstView = false;
+  },
+
   newProject: function() {
     console.log('ROUTE: new project');
     var router = this;
+
+    this.showLoading();
 
     // set up models/collections
     var project = new App.Models.Project();
@@ -1305,6 +1339,8 @@ App.Router.Workspace = Backbone.Router.extend({
     console.log('ROUTE: project list');
     var router = this;
 
+    this.showLoading();
+
     projects = new App.Collections.Projects();
     
     // initialize project list view
@@ -1323,6 +1359,8 @@ App.Router.Workspace = Backbone.Router.extend({
   loadProject: function(id) {
     console.log('ROUTE: load project');
     var router = this;
+
+    this.showLoading();
 
     var project = new App.Models.Project({id: id});
     var parameters = new App.Collections.Parameters();
@@ -1362,17 +1400,9 @@ App.Router.Workspace = Backbone.Router.extend({
     });
   },
 
-  postProjectSync: function() {
-    // update parameters collection with parameter values from project
-    console.log('workspace: updating parameters');
-
-    // fetch project comments
-    this.comments.fetch();
-  },
-
   showError: function(title, message) {
     errorView = new App.Views.Error({title: title, message: message});
-    errorView.setElement(this.el).render();
+    this.showView(errorView);
   },
 
   unknownPath: function(path) {

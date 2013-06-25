@@ -12,6 +12,19 @@
 
 {% block content %}
 
+<div class="container text-center">
+<h1>Loading...</h1>
+<img src="{% static "img/ajax-loader.gif" %}" width="31" height="31"></img>
+</div>
+
+<script type="text/template" id="template-loading">
+<div class="container text-center">
+<h1>Loading...</h1>
+<img src="{% static "img/ajax-loader.gif" %}" width="31" height="31"></img>
+</div>
+</script>
+
+
 <script type="text/template" id="template-dashboard">
 <div class="row" id="dashboard-header">
   <div class="span6" id="project-info">
