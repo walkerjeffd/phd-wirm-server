@@ -13,7 +13,7 @@ from django.shortcuts import get_object_or_404
 @api_view(('GET',))
 def api_root(request, format=None):
     return Response({
-        'users': reverse('users-list', request=request, format=format),
+        # 'users': reverse('users-list', request=request, format=format),
         'parameters': reverse('parameters-list', request=request, format=format),
         'projects': reverse('projects-list', request=request, format=format),
         'comments': reverse('comments-list', request=request, format=format),
