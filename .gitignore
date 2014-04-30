@@ -5,3 +5,5 @@
 
 mysite/mysite/settings/local.py
 mysite/mysite/settings/production.py
+
+sftp-config.json
