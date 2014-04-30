@@ -43,3 +43,11 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     '/home/walkerjeffd/wirm.walkerjeff.com/mysite/templates/',
 )
+
+# email settings for activation emails
+EMAIL_HOST = 'mail.walkerjeff.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'activation@wirm.walkerjeff.com'
+EMAIL_HOST_PASSWORD = 'g5TFFdVj'
+DEFAULT_FROM_EMAIL = 'activation@wirm.walkerjeff.com'
+SERVER_EMAIL = 'activation@wirm.walkerjeff.com'

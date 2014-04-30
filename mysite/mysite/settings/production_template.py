@@ -43,3 +43,11 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     '<abs path to server templates>',
 )
+
+# email settings for activation emails
+EMAIL_HOST = '<mail.example.com>'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = '<activation@example.com>'
+EMAIL_HOST_PASSWORD = '<password>'
+DEFAULT_FROM_EMAIL = '<activation@example.com>'
+SERVER_EMAIL = '<activation@example.com>'

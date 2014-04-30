@@ -52,3 +52,11 @@ INSTALLED_APPS += (
 
 # debug-toolbar
 INTERNAL_IPS = ('127.0.0.1',)
+
+# email settings for activation emails
+EMAIL_HOST = '<mail.example.com>'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = '<activation@example.com>'
+EMAIL_HOST_PASSWORD = '<password>'
+DEFAULT_FROM_EMAIL = '<activation@example.com>'
+SERVER_EMAIL = '<activation@example.com>'
