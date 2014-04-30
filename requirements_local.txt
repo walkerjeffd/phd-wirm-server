@@ -1,7 +1,0 @@
-Django==1.6.4
-South==0.8.4
-django-debug-toolbar==1.2
-django-jsonfield==0.9.12
-django-registration==1.0
-djangorestframework==2.3.13
-sqlparse==0.1.11
