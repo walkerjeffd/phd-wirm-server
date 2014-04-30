@@ -131,8 +131,9 @@ ACCOUNT_ACTIVATION_DAYS = 7
 REGISTRATION_OPEN = True
 # email settings for activation emails
 EMAIL_HOST = 'mail.walkerjeff.com'
+EMAIL_PORT = 587
 EMAIL_HOST_USER = 'activation@wirm.walkerjeff.com'
-EMAIL_HOST_PASSWORD = 'p#XVk-25'
+EMAIL_HOST_PASSWORD = 'g5TFFdVj'
 DEFAULT_FROM_EMAIL = 'activation@wirm.walkerjeff.com'
 SERVER_EMAIL = 'activation@wirm.walkerjeff.com'
 
