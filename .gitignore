@@ -1,0 +1,7 @@
+*.pyo
+*.pyc
+*.sublime*
+*.db
+
+mysite/mysite/settings/local.py
+mysite/mysite/settings/production.py
