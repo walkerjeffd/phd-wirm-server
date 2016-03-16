@@ -7,9 +7,24 @@ The live version of this site is available here: http://wirm.walkerjeff.com
 
 The client-side application for this site is available in a separate repo: https://github.com/walkerjeffd/phd-wirm-client
 
-## Requirements
+## Virtual Environment
 
-The requirements for this application are listed in the `requirements.txt` file. Note that the `django-registration` module is no longer actively maintained and may have compatibility issues with Django v1.6. An alternative fork of this module is available at: https://github.com/macropin/django-registration and is currently used on the live site.
+Set up a new virtual environment using [virtualenv](https://pypi.python.org/pypi/virtualenv):
+
+```bash
+pip install virtualenv
+virtualenv venv
+```
+
+Activate the virtualenv:
+
+```bash
+source venv/bin/activate
+```
+
+## Dependencies
+
+The dependencies for this application are listed in the `requirements.txt` file. Note that the `django-registration` module is no longer actively maintained and may have compatibility issues with Django v1.6. An alternative fork of this module is available at: https://github.com/macropin/django-registration and is currently used on the live site.
 
 To install automatically just use pip:
 
@@ -38,6 +53,17 @@ Then set the various database configuration, directories, email authentication, 
 This Django application uses a client-side application written in backbone, which is stored in a [separate repository](https://github.com/walkerjeffd/phd-wirm-client).
 
 If you update the client-side code, drop the new minified file into the django static folder (e.g. `mysite/wirm/static/js/wirm-0.9.3.min.js`) and be sure to update the version number in the client template html file (`mysite/templates/client.html`).
+
+## Set Up Database
+
+Use South to create the database, and import the initial fixtures.
+
+```shell
+cd mysite
+python manage.py syncdb
+python manage.py migrate
+python manage.py loaddata fixtures/parameters.json
+```
 
 ## Run Locally
 
