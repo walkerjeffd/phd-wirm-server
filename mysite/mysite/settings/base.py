@@ -1,7 +1,7 @@
 # Django settings for mysite project.
 
 ADMINS = (
-    ('Administrator', 'admin@wirm.walkerjeff.com'),
+    ('Administrator', 'jeff@walkerenvres.com'),
 )
 
 MANAGERS = ADMINS
