@@ -8,3 +8,5 @@ mysite/mysite/settings/production.py
 
 sftp-config.json
 passenger_wsgi*
+
+venv/
