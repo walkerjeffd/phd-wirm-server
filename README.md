@@ -72,3 +72,26 @@ To run a local development server simply execute:
 ```shell
 python manage.py runserver
 ```
+
+## Production Server
+
+Use `gunicorn` to run production server. After following the steps above for activating the virtualenv and setting the configuration, install gunicorn with pip.
+
+```
+pip install gunicorn
+```
+
+Copy upstart configuration file from `config/gunicorn.conf` to `/etc/init/wirm.conf`, and then edit the paths if necessary.
+
+```
+sudo cp config/gunicorn.conf /etc/init/wirm.conf
+sudo nano /etc/init/wirm.conf
+```
+
+Start the `wirm` process
+
+```
+sudo start wirm
+```
+
+That should create the `wirm.sock` file, which nginx then connects to.
