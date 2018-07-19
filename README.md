@@ -3,7 +3,7 @@ Web-Based Interactive River Model
 
 This repository contains the source code for the server-side application of the Web-based Interactive River Model.
 
-The live version of this site is available here: http://wirm.walkerenvres.com
+The live version of this site is available here: https://wirm.walkerenvres.com
 
 The client-side application for this site is available in a separate repo: https://github.com/walkerjeffd/phd-wirm-client
 
